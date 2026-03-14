@@ -1,0 +1,2371 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet href="file:///D|/GTA-SA Development/CONR-RP/open.mp-server/qawno/xml/pawndoc.xsl" type="text/xsl"?>
+<doc source="D:\GTA-SA Development\CONR-RP\open.mp-server\filterscripts\fishing\fishing_txd.pwn">
+	<assembly>
+		<name>fishing_txd.pwn</name>
+	</assembly>
+	<members>
+
+		<!-- enumerations -->
+
+		<!-- constants -->
+		<member name="C:cellmax" value="2147483647">
+			<referrer name="operator!(Float:)"/>
+		</member>
+		<member name="C:cellmin" value="-2147483648">
+			<referrer name="operator-(Float:)"/>
+		</member>
+		<member name="C:false" value="0">
+			<tagname value="bool"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="OnPlayerDisconnect"/>
+			<referrer name="OnPlayerCommandText"/>
+			<referrer name="HideFishingUI"/>
+			<referrer name="PlayFishingCastAnim"/>
+			<referrer name="StartFishingWait"/>
+			<referrer name="CheckFishingBite"/>
+			<referrer name="CancelFishing"/>
+			<referrer name="StopFishing"/>
+		</member>
+		<member name="C:true" value="1">
+			<tagname value="bool"/>
+			<referrer name="OnPlayerCommandText"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="PlaySwordIdle"/>
+			<referrer name="StartFishingWait"/>
+			<referrer name="OnFishBite"/>
+			<referrer name="StopFishing"/>
+		</member>
+
+		<!-- variables -->
+		<member name="F:CatchBoxMoving">
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+		</member>
+		<member name="F:CatchBoxSpeed">
+			<tagname value="Float"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+		</member>
+		<member name="F:CatchBoxX">
+			<tagname value="Float"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+		</member>
+		<member name="F:FishCurrentSpeed">
+			<tagname value="Float"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+		</member>
+		<member name="F:FishDir">
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+		</member>
+		<member name="F:FishFakeEscapeCount">
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+		</member>
+		<member name="F:FishFakeEscapesRemaining">
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+		</member>
+		<member name="F:FishPanicCenter">
+			<tagname value="Float"/>
+			<referrer name="MoveFish"/>
+		</member>
+		<member name="F:FishPauseCounter">
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+		</member>
+		<member name="F:FishState">
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+			<referrer name="GetBattleIntensity"/>
+		</member>
+		<member name="F:FishStateCounter">
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+		</member>
+		<member name="F:FishTargetEdge">
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+		</member>
+		<member name="F:FishTimer">
+			<referrer name="ShowFishingUI"/>
+			<referrer name="HideFishingUI"/>
+			<referrer name="StopFishing"/>
+		</member>
+		<member name="F:FishType">
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+			<referrer name="GetBattleIntensity"/>
+		</member>
+		<member name="F:FishX">
+			<tagname value="Float"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<referrer name="GetBattleIntensity"/>
+		</member>
+		<member name="F:FishingAudioHandle">
+			<referrer name="HideFishingUI"/>
+		</member>
+		<member name="F:FishingBiteTime">
+			<referrer name="StartFishingWait"/>
+			<referrer name="CheckFishingBite"/>
+		</member>
+		<member name="F:FishingStarting">
+			<tagname value="bool"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="OnPlayerDisconnect"/>
+			<referrer name="OnPlayerCommandText"/>
+			<referrer name="StartFishingWait"/>
+			<referrer name="CancelFishing"/>
+			<referrer name="StopFishing"/>
+			<referrer name="IsPlayerFishing"/>
+		</member>
+		<member name="F:FishingUI">
+			<tagname value="bool"/>
+			<referrer name="OnPlayerDisconnect"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="HideFishingUI"/>
+			<referrer name="MoveFish"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<referrer name="PlaySwordIdle"/>
+			<referrer name="OnFishBite"/>
+			<referrer name="StopFishing"/>
+			<referrer name="IsPlayerFishing"/>
+		</member>
+		<member name="F:FishingWaitStartTime">
+			<referrer name="StartFishingWait"/>
+		</member>
+		<member name="F:FishingWaitState">
+			<tagname value="bool"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="OnPlayerDisconnect"/>
+			<referrer name="OnPlayerCommandText"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<referrer name="StartFishingWait"/>
+			<referrer name="CheckFishingBite"/>
+			<referrer name="CancelFishing"/>
+			<referrer name="IsPlayerInFishingWaitState"/>
+			<referrer name="IsPlayerFishing"/>
+		</member>
+		<member name="F:FishingWaitTimer">
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="OnPlayerDisconnect"/>
+			<referrer name="StartFishingWait"/>
+			<referrer name="CheckFishingBite"/>
+			<referrer name="CancelFishing"/>
+		</member>
+		<member name="F:LastBattleIntensity">
+			<referrer name="ShowFishingUI"/>
+			<referrer name="PlayBattleSounds"/>
+		</member>
+		<member name="F:PlayerFishingLevel">
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="OnPlayerCommandText"/>
+			<referrer name="LoadPlayerFishingLevel"/>
+			<referrer name="UpdatePlayerFishingLevel"/>
+			<referrer name="SetPlayerFishingLevel"/>
+		</member>
+		<member name="F:PlayerFishingMissCount">
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<referrer name="StartFishingWait"/>
+			<referrer name="StopFishing"/>
+		</member>
+		<member name="F:PlayerTD">
+			<tagname value="PlayerText"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="OnPlayerDisconnect"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="HideFishingUI"/>
+		</member>
+		<member name="F:__date">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__time">
+		</member>
+		<member name="F:border">
+			<tagname value="PlayerText"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="OnPlayerDisconnect"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="HideFishingUI"/>
+		</member>
+		<member name="F:catch_box">
+			<tagname value="PlayerText"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="OnPlayerDisconnect"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="HideFishingUI"/>
+			<referrer name="MoveFish"/>
+		</member>
+		<member name="F:container">
+			<tagname value="PlayerText"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="OnPlayerDisconnect"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="HideFishingUI"/>
+		</member>
+		<member name="F:fish_sprite">
+			<tagname value="PlayerText"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="OnPlayerDisconnect"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="HideFishingUI"/>
+			<referrer name="MoveFish"/>
+		</member>
+		<member name="F:reel_bubble">
+			<tagname value="PlayerText"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="OnPlayerDisconnect"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="HideFishingUI"/>
+		</member>
+
+		<!-- functions -->
+		<member name="M:operator!(Float:)" syntax="operator!(Float:)(oper)">
+			<tagname value="bool"/>
+			<stacksize value="1"/>
+			<dependency name="cellmax"/>
+			<param name="oper">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator%(_:,Float:)" syntax="operator%(_:,Float:)(oper1, oper2)">
+			<stacksize value="1"/>
+			<param name="oper1">
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator%(Float:,_:)" syntax="operator%(Float:,_:)(oper1, oper2)">
+			<stacksize value="1"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+			</param>
+		</member>
+		<member name="M:operator%(Float:,Float:)" syntax="operator%(Float:,Float:)(oper1, oper2)">
+			<stacksize value="1"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator!=(Float:,_:)" syntax="operator!=(Float:,_:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<dependency name="float"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+			</param>
+		</member>
+		<member name="M:operator!=(Float:,Float:)" syntax="operator!=(Float:,Float:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator-(_:,Float:)" syntax="operator-(_:,Float:)(oper1, oper2)">
+			<tagname value="Float"/>
+			<stacksize value="4"/>
+			<dependency name="float"/>
+			<dependency name="floatsub"/>
+			<param name="oper1">
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator-(Float:,_:)" syntax="operator-(Float:,_:)(oper1, oper2)">
+			<tagname value="Float"/>
+			<stacksize value="4"/>
+			<dependency name="float"/>
+			<dependency name="floatsub"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+			</param>
+		</member>
+		<member name="M:operator+(Float:,_:)" syntax="operator+(Float:,_:)(oper1, oper2)">
+			<tagname value="Float"/>
+			<stacksize value="4"/>
+			<dependency name="float"/>
+			<dependency name="floatadd"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+			</param>
+		</member>
+		<member name="M:operator/(_:,Float:)" syntax="operator/(_:,Float:)(oper1, oper2)">
+			<tagname value="Float"/>
+			<stacksize value="4"/>
+			<referrer name="MoveFish"/>
+			<dependency name="float"/>
+			<dependency name="floatdiv"/>
+			<param name="oper1">
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator/(Float:,_:)" syntax="operator/(Float:,_:)(oper1, oper2)">
+			<tagname value="Float"/>
+			<stacksize value="4"/>
+			<dependency name="float"/>
+			<dependency name="floatdiv"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+			</param>
+		</member>
+		<member name="M:operator*(Float:,_:)" syntax="operator*(Float:,_:)(oper1, oper2)">
+			<tagname value="Float"/>
+			<stacksize value="4"/>
+			<referrer name="MoveFish"/>
+			<dependency name="float"/>
+			<dependency name="floatmul"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+			</param>
+		</member>
+		<member name="M:operator++(Float:)" syntax="operator++(Float:)(oper)">
+			<tagname value="Float"/>
+			<stacksize value="1"/>
+			<dependency name="operator+(Float:,Float:)"/>
+			<param name="oper">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator-(Float:)" syntax="operator-(Float:)(oper)">
+			<tagname value="Float"/>
+			<stacksize value="1"/>
+			<dependency name="cellmin"/>
+			<param name="oper">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator--(Float:)" syntax="operator--(Float:)(oper)">
+			<tagname value="Float"/>
+			<stacksize value="1"/>
+			<dependency name="operator-(Float:,Float:)"/>
+			<param name="oper">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator-(Float:,Float:)" syntax="operator-(Float:,Float:)(oper1, oper2)">
+			<tagname value="Float"/>
+			<attribute name="native"/>
+			<referrer name="operator--(Float:)"/>
+			<referrer name="GetDistance3D"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<referrer name="GetBattleIntensity"/>
+			<referrer name="StartFishingWait"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator+(Float:,Float:)" syntax="operator+(Float:,Float:)(oper1, oper2)">
+			<tagname value="Float"/>
+			<attribute name="native"/>
+			<referrer name="operator++(Float:)"/>
+			<referrer name="GetDistance3D"/>
+			<referrer name="MoveFish"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<referrer name="GetBattleIntensity"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator/(Float:,Float:)" syntax="operator/(Float:,Float:)(oper1, oper2)">
+			<tagname value="Float"/>
+			<attribute name="native"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<referrer name="StartFishingWait"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator*(Float:,Float:)" syntax="operator*(Float:,Float:)(oper1, oper2)">
+			<tagname value="Float"/>
+			<attribute name="native"/>
+			<referrer name="MoveFish"/>
+			<referrer name="StartFishingWait"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator==(Float:,Float:)" syntax="operator==(Float:,Float:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator==(Float:,_:)" syntax="operator==(Float:,_:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<dependency name="float"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+			</param>
+		</member>
+		<member name="M:operator&gt;(Float:,Float:)" syntax="operator&gt;(Float:,Float:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator&gt;(Float:,_:)" syntax="operator&gt;(Float:,_:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<dependency name="float"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+			</param>
+		</member>
+		<member name="M:operator&gt;(_:,Float:)" syntax="operator&gt;(_:,Float:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<dependency name="float"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator&gt;=(Float:,Float:)" syntax="operator&gt;=(Float:,Float:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<referrer name="MoveFish"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<referrer name="GetBattleIntensity"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator&gt;=(Float:,_:)" syntax="operator&gt;=(Float:,_:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<dependency name="float"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+			</param>
+		</member>
+		<member name="M:operator&gt;=(_:,Float:)" syntax="operator&gt;=(_:,Float:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<dependency name="float"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator&lt;(Float:,Float:)" syntax="operator&lt;(Float:,Float:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<referrer name="MoveFish"/>
+			<referrer name="StartFishingWait"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator&lt;(Float:,_:)" syntax="operator&lt;(Float:,_:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<dependency name="float"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+			</param>
+		</member>
+		<member name="M:operator&lt;(_:,Float:)" syntax="operator&lt;(_:,Float:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<dependency name="float"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator&lt;=(Float:,Float:)" syntax="operator&lt;=(Float:,Float:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<referrer name="MoveFish"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<referrer name="GetBattleIntensity"/>
+			<referrer name="Audio_PlayInRange"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:operator&lt;=(Float:,_:)" syntax="operator&lt;=(Float:,_:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<dependency name="float"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+			</param>
+		</member>
+		<member name="M:operator&lt;=(_:,Float:)" syntax="operator&lt;=(_:,Float:)(oper1, oper2)">
+			<tagname value="bool"/>
+			<stacksize value="4"/>
+			<dependency name="float"/>
+			<dependency name="floatcmp"/>
+			<param name="oper1">
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:@receivepacket" syntax="@receivepacket(packet[], size, source[])">
+			<attribute name="public"/>
+			<stacksize value="1"/>
+			<param name="packet">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="size">
+			</param>
+			<param name="source">
+				<paraminfo> [] </paraminfo>
+			</param>
+		</member>
+		<member name="M:@receivestring" syntax="@receivestring(message[], source[])">
+			<attribute name="public"/>
+			<stacksize value="1"/>
+			<param name="message">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="source">
+				<paraminfo> [] </paraminfo>
+			</param>
+		</member>
+		<member name="M:ApplyAnimation" syntax="ApplyAnimation(playerid, animlib[], animname[], fDelta, loop, lockx, locky, freeze, time, forcesync)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerCommandText"/>
+			<referrer name="PlaySwordIdle"/>
+			<referrer name="PlayFishingCastAnim"/>
+			<referrer name="StartFishingWait"/>
+			<referrer name="OnFishBite"/>
+			<param name="playerid">
+			</param>
+			<param name="animlib">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="animname">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="fDelta">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="loop">
+			</param>
+			<param name="lockx">
+			</param>
+			<param name="locky">
+			</param>
+			<param name="freeze">
+			</param>
+			<param name="time">
+			</param>
+			<param name="forcesync">
+			</param>
+		</member>
+		<member name="M:Audio_Play" syntax="Audio_Play(playerid, url[], volume, flags)">
+			<attribute name="native"/>
+			<referrer name="Audio_PlayForAll"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<param name="playerid">
+			</param>
+			<param name="url">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="volume">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="flags">
+			</param>
+		</member>
+		<member name="M:Audio_Play3D" syntax="Audio_Play3D(playerid, url[], x, y, z, distance, volume, flags)">
+			<attribute name="native"/>
+			<referrer name="Audio_PlayInRange"/>
+			<param name="playerid">
+			</param>
+			<param name="url">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="x">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="y">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="z">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="distance">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="volume">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="flags">
+			</param>
+		</member>
+		<member name="M:Audio_PlayForAll" syntax="Audio_PlayForAll(url[], volume, flags)">
+			<stacksize value="8"/>
+			<dependency name="Audio_Play"/>
+			<dependency name="IsPlayerConnected"/>
+			<param name="url">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="volume">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="flags">
+			</param>
+		</member>
+		<member name="M:Audio_PlayInRange" syntax="Audio_PlayInRange(x, y, z, range, url[], volume)">
+			<stacksize value="15"/>
+			<dependency name="operator&lt;=(Float:,Float:)"/>
+			<dependency name="Audio_Play3D"/>
+			<dependency name="GetDistance3D"/>
+			<dependency name="GetPlayerPos"/>
+			<dependency name="IsPlayerConnected"/>
+			<param name="x">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="y">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="z">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="range">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="url">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="volume">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:Audio_SendToClient" syntax="Audio_SendToClient(playerid, command[])">
+			<attribute name="public"/>
+			<stacksize value="262"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="format"/>
+			<dependency name="printf"/>
+			<param name="playerid">
+			</param>
+			<param name="command">
+				<paraminfo> [] </paraminfo>
+			</param>
+		</member>
+		<member name="M:Audio_Stop" syntax="Audio_Stop(playerid, audioid)">
+			<attribute name="native"/>
+			<referrer name="HideFishingUI"/>
+			<param name="playerid">
+			</param>
+			<param name="audioid">
+			</param>
+		</member>
+		<member name="M:CallRemoteFunction" syntax="CallRemoteFunction(function[], format[], ...)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerCommandText"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<referrer name="PlayBattleSounds"/>
+			<referrer name="PlayFishingStartSoundDelayed"/>
+			<referrer name="StartFishingWait"/>
+			<referrer name="OnFishBite"/>
+			<referrer name="StopFishing"/>
+			<referrer name="GetPlayerFishingLevel"/>
+			<param name="function">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="format">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="...">
+				<paraminfo> {Float,_} </paraminfo>
+			</param>
+		</member>
+		<member name="M:CancelFishing" syntax="CancelFishing(playerid)">
+			<stacksize value="5"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<dependency name="ClearAnimations"/>
+			<dependency name="FishingStarting"/>
+			<dependency name="FishingWaitState"/>
+			<dependency name="FishingWaitTimer"/>
+			<dependency name="IsPlayerAttachedObjectSlotUsed"/>
+			<dependency name="KillTimer"/>
+			<dependency name="RemovePlayerAttachedObject"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="false"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:CheckFishingBite" syntax="CheckFishingBite(playerid)">
+			<attribute name="public"/>
+			<stacksize value="72"/>
+			<dependency name="FishingBiteTime"/>
+			<dependency name="FishingWaitState"/>
+			<dependency name="FishingWaitTimer"/>
+			<dependency name="GameTextForPlayer"/>
+			<dependency name="GetTickCount"/>
+			<dependency name="KillTimer"/>
+			<dependency name="OnFishBite"/>
+			<dependency name="false"/>
+			<dependency name="format"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:ClearAnimations" syntax="ClearAnimations(playerid, forcesync)">
+			<attribute name="native"/>
+			<referrer name="HideFishingUI"/>
+			<referrer name="CancelFishing"/>
+			<referrer name="StopFishing"/>
+			<param name="playerid">
+			</param>
+			<param name="forcesync">
+			</param>
+		</member>
+		<member name="M:CreatePlayerTextDraw" syntax="CreatePlayerTextDraw(playerid, x, y, text[])">
+			<tagname value="PlayerText"/>
+			<attribute name="native"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="x">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="y">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="text">
+				<paraminfo> [] </paraminfo>
+			</param>
+		</member>
+		<member name="M:DisablePlayerCheckpoint" syntax="DisablePlayerCheckpoint(playerid)">
+			<attribute name="native"/>
+			<referrer name="StartFishingWait"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:EditAttachedObject" syntax="EditAttachedObject(playerid, index)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerCommandText"/>
+			<param name="playerid">
+			</param>
+			<param name="index">
+			</param>
+		</member>
+		<member name="M:GameTextForPlayer" syntax="GameTextForPlayer(playerid, string[], time, style)">
+			<attribute name="native"/>
+			<referrer name="CheckFishingBite"/>
+			<referrer name="OnFishBite"/>
+			<param name="playerid">
+			</param>
+			<param name="string">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="time">
+			</param>
+			<param name="style">
+			</param>
+		</member>
+		<member name="M:GetBattleIntensity" syntax="GetBattleIntensity(playerid)">
+			<stacksize value="2"/>
+			<referrer name="PlayBattleSounds"/>
+			<dependency name="operator-(Float:,Float:)"/>
+			<dependency name="operator+(Float:,Float:)"/>
+			<dependency name="operator&gt;=(Float:,Float:)"/>
+			<dependency name="operator&lt;=(Float:,Float:)"/>
+			<dependency name="FishState"/>
+			<dependency name="FishType"/>
+			<dependency name="FishX"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:GetDistance3D" syntax="GetDistance3D(x1, y1, z1, x2, y2, z2)">
+			<tagname value="Float"/>
+			<stacksize value="4"/>
+			<referrer name="Audio_PlayInRange"/>
+			<dependency name="operator-(Float:,Float:)"/>
+			<dependency name="operator+(Float:,Float:)"/>
+			<dependency name="floatpower"/>
+			<dependency name="floatsqroot"/>
+			<param name="x1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="y1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="z1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="x2">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="y2">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="z2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:GetPlayerFishingLevel" syntax="GetPlayerFishingLevel(playerid)">
+			<attribute name="public"/>
+			<stacksize value="5"/>
+			<dependency name="CallRemoteFunction"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:GetPlayerKeys" syntax="GetPlayerKeys(playerid, &amp;keys, &amp;updown, &amp;leftright)">
+			<attribute name="native"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="keys">
+				<paraminfo> &amp; </paraminfo>
+			</param>
+			<param name="updown">
+				<paraminfo> &amp; </paraminfo>
+			</param>
+			<param name="leftright">
+				<paraminfo> &amp; </paraminfo>
+			</param>
+		</member>
+		<member name="M:GetPlayerPos" syntax="GetPlayerPos(playerid, &amp;x, &amp;y, &amp;z)">
+			<attribute name="native"/>
+			<referrer name="Audio_PlayInRange"/>
+			<param name="playerid">
+			</param>
+			<param name="x">
+				<paraminfo>Float &amp; </paraminfo>
+			</param>
+			<param name="y">
+				<paraminfo>Float &amp; </paraminfo>
+			</param>
+			<param name="z">
+				<paraminfo>Float &amp; </paraminfo>
+			</param>
+		</member>
+		<member name="M:GetPlayerState" syntax="GetPlayerState(playerid)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerCommandText"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:GetTickCount" syntax="GetTickCount()">
+			<attribute name="native"/>
+			<referrer name="StartFishingWait"/>
+			<referrer name="CheckFishingBite"/>
+		</member>
+		<member name="M:HideFishingUI" syntax="HideFishingUI(playerid)">
+			<stacksize value="5"/>
+			<referrer name="StopFishing"/>
+			<dependency name="Audio_Stop"/>
+			<dependency name="ClearAnimations"/>
+			<dependency name="FishTimer"/>
+			<dependency name="FishingAudioHandle"/>
+			<dependency name="FishingUI"/>
+			<dependency name="IsPlayerAttachedObjectSlotUsed"/>
+			<dependency name="KillTimer"/>
+			<dependency name="PlayerTD"/>
+			<dependency name="PlayerTD"/>
+			<dependency name="PlayerTextDrawHide"/>
+			<dependency name="RemovePlayerAttachedObject"/>
+			<dependency name="border"/>
+			<dependency name="catch_box"/>
+			<dependency name="container"/>
+			<dependency name="false"/>
+			<dependency name="fish_sprite"/>
+			<dependency name="printf"/>
+			<dependency name="reel_bubble"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:IsPlayerAttachedObjectSlotUsed" syntax="IsPlayerAttachedObjectSlotUsed(playerid, index)">
+			<attribute name="native"/>
+			<referrer name="HideFishingUI"/>
+			<referrer name="CancelFishing"/>
+			<referrer name="StopFishing"/>
+			<param name="playerid">
+			</param>
+			<param name="index">
+			</param>
+		</member>
+		<member name="M:IsPlayerConnected" syntax="IsPlayerConnected(playerid)">
+			<attribute name="native"/>
+			<referrer name="Audio_PlayForAll"/>
+			<referrer name="Audio_PlayInRange"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:IsPlayerFishing" syntax="IsPlayerFishing(playerid)">
+			<attribute name="public"/>
+			<stacksize value="1"/>
+			<dependency name="FishingStarting"/>
+			<dependency name="FishingUI"/>
+			<dependency name="FishingWaitState"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:IsPlayerInFishingWaitState" syntax="IsPlayerInFishingWaitState(playerid)">
+			<attribute name="public"/>
+			<stacksize value="1"/>
+			<dependency name="FishingWaitState"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:KillTimer" syntax="KillTimer(timerid)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerDisconnect"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="HideFishingUI"/>
+			<referrer name="CheckFishingBite"/>
+			<referrer name="CancelFishing"/>
+			<referrer name="StopFishing"/>
+			<param name="timerid">
+			</param>
+		</member>
+		<member name="M:LoadPlayerFishingLevel" syntax="LoadPlayerFishingLevel(playerid)">
+			<stacksize value="1"/>
+			<dependency name="PlayerFishingLevel"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:MoveFish" syntax="MoveFish(playerid)">
+			<attribute name="public"/>
+			<stacksize value="73"/>
+			<dependency name="operator/(_:,Float:)"/>
+			<dependency name="operator*(Float:,_:)"/>
+			<dependency name="operator-(Float:,Float:)"/>
+			<dependency name="operator+(Float:,Float:)"/>
+			<dependency name="operator*(Float:,Float:)"/>
+			<dependency name="operator&gt;(Float:,Float:)"/>
+			<dependency name="operator&gt;=(Float:,Float:)"/>
+			<dependency name="operator&lt;(Float:,Float:)"/>
+			<dependency name="operator&lt;=(Float:,Float:)"/>
+			<dependency name="CatchBoxMoving"/>
+			<dependency name="CatchBoxSpeed"/>
+			<dependency name="CatchBoxX"/>
+			<dependency name="CreatePlayerTextDraw"/>
+			<dependency name="FishCurrentSpeed"/>
+			<dependency name="FishDir"/>
+			<dependency name="FishFakeEscapeCount"/>
+			<dependency name="FishFakeEscapesRemaining"/>
+			<dependency name="FishPanicCenter"/>
+			<dependency name="FishPauseCounter"/>
+			<dependency name="FishState"/>
+			<dependency name="FishStateCounter"/>
+			<dependency name="FishTargetEdge"/>
+			<dependency name="FishType"/>
+			<dependency name="FishX"/>
+			<dependency name="FishingUI"/>
+			<dependency name="GetPlayerKeys"/>
+			<dependency name="PlayBattleSounds"/>
+			<dependency name="PlayerTextDrawAlignment"/>
+			<dependency name="PlayerTextDrawBackgroundColor"/>
+			<dependency name="PlayerTextDrawBoxColor"/>
+			<dependency name="PlayerTextDrawColor"/>
+			<dependency name="PlayerTextDrawDestroy"/>
+			<dependency name="PlayerTextDrawFont"/>
+			<dependency name="PlayerTextDrawHide"/>
+			<dependency name="PlayerTextDrawLetterSize"/>
+			<dependency name="PlayerTextDrawSetOutline"/>
+			<dependency name="PlayerTextDrawSetProportional"/>
+			<dependency name="PlayerTextDrawSetSelectable"/>
+			<dependency name="PlayerTextDrawSetShadow"/>
+			<dependency name="PlayerTextDrawShow"/>
+			<dependency name="PlayerTextDrawTextSize"/>
+			<dependency name="PlayerTextDrawUseBox"/>
+			<dependency name="catch_box"/>
+			<dependency name="fish_sprite"/>
+			<dependency name="random"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:OnActorStreamIn" syntax="OnActorStreamIn(actorid, forplayerid)">
+			<stacksize value="1"/>
+			<param name="actorid">
+			</param>
+			<param name="forplayerid">
+			</param>
+		</member>
+		<member name="M:OnActorStreamOut" syntax="OnActorStreamOut(actorid, forplayerid)">
+			<stacksize value="1"/>
+			<param name="actorid">
+			</param>
+			<param name="forplayerid">
+			</param>
+		</member>
+		<member name="M:OnAudioError" syntax="OnAudioError(playerid, audioid, errorcode)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="audioid">
+			</param>
+			<param name="errorcode">
+			</param>
+		</member>
+		<member name="M:OnAudioFinished" syntax="OnAudioFinished(playerid, audioid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="audioid">
+			</param>
+		</member>
+		<member name="M:OnDialogResponse" syntax="OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="dialogid">
+			</param>
+			<param name="response">
+			</param>
+			<param name="listitem">
+			</param>
+			<param name="inputtext">
+				<paraminfo> [] </paraminfo>
+			</param>
+		</member>
+		<member name="M:OnEnterExitModShop" syntax="OnEnterExitModShop(playerid, enterexit, interiorid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="enterexit">
+			</param>
+			<param name="interiorid">
+			</param>
+		</member>
+		<member name="M:OnFilterScriptExit" syntax="OnFilterScriptExit()">
+			<attribute name="public"/>
+			<stacksize value="1"/>
+		</member>
+		<member name="M:OnFilterScriptInit" syntax="OnFilterScriptInit()">
+			<attribute name="public"/>
+			<stacksize value="3"/>
+			<dependency name="printf"/>
+		</member>
+		<member name="M:OnFishBite" syntax="OnFishBite(playerid)">
+			<attribute name="public"/>
+			<stacksize value="12"/>
+			<referrer name="CheckFishingBite"/>
+			<dependency name="ApplyAnimation"/>
+			<dependency name="CallRemoteFunction"/>
+			<dependency name="FishingUI"/>
+			<dependency name="GameTextForPlayer"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="ShowFishingUI"/>
+			<dependency name="true"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:OnGameModeExit" syntax="OnGameModeExit()">
+			<stacksize value="1"/>
+		</member>
+		<member name="M:OnGameModeInit" syntax="OnGameModeInit()">
+			<stacksize value="1"/>
+		</member>
+		<member name="M:OnIncomingConnection" syntax="OnIncomingConnection(playerid, ip_address[], port)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="ip_address">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="port">
+			</param>
+		</member>
+		<member name="M:OnLoadFishingLevel" syntax="OnLoadFishingLevel(playerid)">
+			<attribute name="public"/>
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:OnObjectMoved" syntax="OnObjectMoved(objectid)">
+			<stacksize value="1"/>
+			<param name="objectid">
+			</param>
+		</member>
+		<member name="M:OnPlayerClickMap" syntax="OnPlayerClickMap(playerid, fX, fY, fZ)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="fX">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fY">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fZ">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:OnPlayerClickPlayer" syntax="OnPlayerClickPlayer(playerid, clickedplayerid, source)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="clickedplayerid">
+			</param>
+			<param name="source">
+			</param>
+		</member>
+		<member name="M:OnPlayerClickPlayerTextDraw" syntax="OnPlayerClickPlayerTextDraw(playerid, playertextid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="playertextid">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+		</member>
+		<member name="M:OnPlayerClickTextDraw" syntax="OnPlayerClickTextDraw(playerid, clickedid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="clickedid">
+				<paraminfo>Text </paraminfo>
+			</param>
+		</member>
+		<member name="M:OnPlayerCommandText" syntax="OnPlayerCommandText(playerid, cmdtext[])">
+			<attribute name="public"/>
+			<stacksize value="136"/>
+			<dependency name="ApplyAnimation"/>
+			<dependency name="CallRemoteFunction"/>
+			<dependency name="EditAttachedObject"/>
+			<dependency name="FishingStarting"/>
+			<dependency name="FishingWaitState"/>
+			<dependency name="GetPlayerState"/>
+			<dependency name="PlayerFishingLevel"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="SetPlayerAttachedObject"/>
+			<dependency name="SetTimerEx"/>
+			<dependency name="false"/>
+			<dependency name="format"/>
+			<dependency name="printf"/>
+			<dependency name="sscanf"/>
+			<dependency name="strcmp"/>
+			<dependency name="true"/>
+			<param name="playerid">
+			</param>
+			<param name="cmdtext">
+				<paraminfo> [] </paraminfo>
+			</param>
+		</member>
+		<member name="M:OnPlayerConnect" syntax="OnPlayerConnect(playerid)">
+			<attribute name="public"/>
+			<stacksize value="6"/>
+			<dependency name="CreatePlayerTextDraw"/>
+			<dependency name="FishDir"/>
+			<dependency name="FishX"/>
+			<dependency name="FishingStarting"/>
+			<dependency name="FishingWaitState"/>
+			<dependency name="FishingWaitTimer"/>
+			<dependency name="PlayerFishingLevel"/>
+			<dependency name="PlayerFishingMissCount"/>
+			<dependency name="PlayerTD"/>
+			<dependency name="PlayerTD"/>
+			<dependency name="PlayerTextDrawAlignment"/>
+			<dependency name="PlayerTextDrawBackgroundColor"/>
+			<dependency name="PlayerTextDrawBoxColor"/>
+			<dependency name="PlayerTextDrawColor"/>
+			<dependency name="PlayerTextDrawFont"/>
+			<dependency name="PlayerTextDrawLetterSize"/>
+			<dependency name="PlayerTextDrawSetOutline"/>
+			<dependency name="PlayerTextDrawSetProportional"/>
+			<dependency name="PlayerTextDrawSetSelectable"/>
+			<dependency name="PlayerTextDrawSetShadow"/>
+			<dependency name="PlayerTextDrawTextSize"/>
+			<dependency name="PlayerTextDrawUseBox"/>
+			<dependency name="border"/>
+			<dependency name="catch_box"/>
+			<dependency name="container"/>
+			<dependency name="false"/>
+			<dependency name="fish_sprite"/>
+			<dependency name="reel_bubble"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:OnPlayerDeath" syntax="OnPlayerDeath(playerid, killerid, reason)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="killerid">
+			</param>
+			<param name="reason">
+			</param>
+		</member>
+		<member name="M:OnPlayerDisconnect" syntax="OnPlayerDisconnect(playerid, reason)">
+			<attribute name="public"/>
+			<stacksize value="5"/>
+			<dependency name="FishingStarting"/>
+			<dependency name="FishingUI"/>
+			<dependency name="FishingWaitState"/>
+			<dependency name="FishingWaitTimer"/>
+			<dependency name="KillTimer"/>
+			<dependency name="PlayerTD"/>
+			<dependency name="PlayerTD"/>
+			<dependency name="PlayerTextDrawDestroy"/>
+			<dependency name="border"/>
+			<dependency name="catch_box"/>
+			<dependency name="container"/>
+			<dependency name="false"/>
+			<dependency name="fish_sprite"/>
+			<dependency name="reel_bubble"/>
+			<param name="playerid">
+			</param>
+			<param name="reason">
+			</param>
+		</member>
+		<member name="M:OnPlayerEditAttachedObject" syntax="OnPlayerEditAttachedObject(playerid, response, index, modelid, boneid, fOffsetX, fOffsetY, fOffsetZ, fRotX, fRotY, fRotZ, fScaleX, fScaleY, fScaleZ)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="response">
+			</param>
+			<param name="index">
+			</param>
+			<param name="modelid">
+			</param>
+			<param name="boneid">
+			</param>
+			<param name="fOffsetX">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fOffsetY">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fOffsetZ">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fRotX">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fRotY">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fRotZ">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fScaleX">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fScaleY">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fScaleZ">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:OnPlayerEditObject" syntax="OnPlayerEditObject(playerid, playerobject, objectid, response, fX, fY, fZ, fRotX, fRotY, fRotZ)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="playerobject">
+			</param>
+			<param name="objectid">
+			</param>
+			<param name="response">
+			</param>
+			<param name="fX">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fY">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fZ">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fRotX">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fRotY">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fRotZ">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:OnPlayerEnterCheckpoint" syntax="OnPlayerEnterCheckpoint(playerid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:OnPlayerEnterRaceCheckpoint" syntax="OnPlayerEnterRaceCheckpoint(playerid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:OnPlayerEnterVehicle" syntax="OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="vehicleid">
+			</param>
+			<param name="ispassenger">
+			</param>
+		</member>
+		<member name="M:OnPlayerExitVehicle" syntax="OnPlayerExitVehicle(playerid, vehicleid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="vehicleid">
+			</param>
+		</member>
+		<member name="M:OnPlayerExitedMenu" syntax="OnPlayerExitedMenu(playerid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:OnPlayerGiveDamage" syntax="OnPlayerGiveDamage(playerid, damagedid, amount, weaponid, bodypart)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="damagedid">
+			</param>
+			<param name="amount">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="weaponid">
+			</param>
+			<param name="bodypart">
+			</param>
+		</member>
+		<member name="M:OnPlayerGiveDamageActor" syntax="OnPlayerGiveDamageActor(playerid, damaged_actorid, amount, weaponid, bodypart)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="damaged_actorid">
+			</param>
+			<param name="amount">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="weaponid">
+			</param>
+			<param name="bodypart">
+			</param>
+		</member>
+		<member name="M:OnPlayerInteriorChange" syntax="OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="newinteriorid">
+			</param>
+			<param name="oldinteriorid">
+			</param>
+		</member>
+		<member name="M:OnPlayerKeyStateChange" syntax="OnPlayerKeyStateChange(playerid, newkeys, oldkeys)">
+			<attribute name="public"/>
+			<stacksize value="138"/>
+			<dependency name="operator-(Float:,Float:)"/>
+			<dependency name="operator+(Float:,Float:)"/>
+			<dependency name="operator/(Float:,Float:)"/>
+			<dependency name="operator&gt;=(Float:,Float:)"/>
+			<dependency name="operator&lt;=(Float:,Float:)"/>
+			<dependency name="Audio_Play"/>
+			<dependency name="CallRemoteFunction"/>
+			<dependency name="CancelFishing"/>
+			<dependency name="CatchBoxX"/>
+			<dependency name="FishX"/>
+			<dependency name="FishingUI"/>
+			<dependency name="FishingWaitState"/>
+			<dependency name="PlayerFishingMissCount"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="StopFishing"/>
+			<dependency name="format"/>
+			<dependency name="printf"/>
+			<param name="playerid">
+			</param>
+			<param name="newkeys">
+			</param>
+			<param name="oldkeys">
+			</param>
+		</member>
+		<member name="M:OnPlayerLeaveCheckpoint" syntax="OnPlayerLeaveCheckpoint(playerid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:OnPlayerLeaveRaceCheckpoint" syntax="OnPlayerLeaveRaceCheckpoint(playerid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:OnPlayerObjectMoved" syntax="OnPlayerObjectMoved(playerid, objectid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="objectid">
+			</param>
+		</member>
+		<member name="M:OnPlayerPickUpPickup" syntax="OnPlayerPickUpPickup(playerid, pickupid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="pickupid">
+			</param>
+		</member>
+		<member name="M:OnPlayerRequestClass" syntax="OnPlayerRequestClass(playerid, classid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="classid">
+			</param>
+		</member>
+		<member name="M:OnPlayerRequestSpawn" syntax="OnPlayerRequestSpawn(playerid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:OnPlayerSelectObject" syntax="OnPlayerSelectObject(playerid, type, objectid, modelid, fX, fY, fZ)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="type">
+			</param>
+			<param name="objectid">
+			</param>
+			<param name="modelid">
+			</param>
+			<param name="fX">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fY">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fZ">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:OnPlayerSelectedMenuRow" syntax="OnPlayerSelectedMenuRow(playerid, row)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="row">
+			</param>
+		</member>
+		<member name="M:OnPlayerSpawn" syntax="OnPlayerSpawn(playerid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:OnPlayerStateChange" syntax="OnPlayerStateChange(playerid, newstate, oldstate)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="newstate">
+			</param>
+			<param name="oldstate">
+			</param>
+		</member>
+		<member name="M:OnPlayerStreamIn" syntax="OnPlayerStreamIn(playerid, forplayerid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="forplayerid">
+			</param>
+		</member>
+		<member name="M:OnPlayerStreamOut" syntax="OnPlayerStreamOut(playerid, forplayerid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="forplayerid">
+			</param>
+		</member>
+		<member name="M:OnPlayerTakeDamage" syntax="OnPlayerTakeDamage(playerid, issuerid, amount, weaponid, bodypart)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="issuerid">
+			</param>
+			<param name="amount">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="weaponid">
+			</param>
+			<param name="bodypart">
+			</param>
+		</member>
+		<member name="M:OnPlayerText" syntax="OnPlayerText(playerid, text[])">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo> [] </paraminfo>
+			</param>
+		</member>
+		<member name="M:OnPlayerUpdate" syntax="OnPlayerUpdate(playerid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:OnPlayerWeaponShot" syntax="OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, fX, fY, fZ)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="weaponid">
+			</param>
+			<param name="hittype">
+			</param>
+			<param name="hitid">
+			</param>
+			<param name="fX">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fY">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fZ">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:OnRconCommand" syntax="OnRconCommand(cmd[])">
+			<stacksize value="1"/>
+			<param name="cmd">
+				<paraminfo> [] </paraminfo>
+			</param>
+		</member>
+		<member name="M:OnRconLoginAttempt" syntax="OnRconLoginAttempt(ip[], password[], success)">
+			<stacksize value="1"/>
+			<param name="ip">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="password">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="success">
+			</param>
+		</member>
+		<member name="M:OnTrailerUpdate" syntax="OnTrailerUpdate(playerid, vehicleid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="vehicleid">
+			</param>
+		</member>
+		<member name="M:OnUnoccupiedVehicleUpdate" syntax="OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, new_x, new_y, new_z, vel_x, vel_y, vel_z)">
+			<stacksize value="1"/>
+			<param name="vehicleid">
+			</param>
+			<param name="playerid">
+			</param>
+			<param name="passenger_seat">
+			</param>
+			<param name="new_x">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="new_y">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="new_z">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="vel_x">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="vel_y">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="vel_z">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:OnVehicleDamageStatusUpdate" syntax="OnVehicleDamageStatusUpdate(vehicleid, playerid)">
+			<stacksize value="1"/>
+			<param name="vehicleid">
+			</param>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:OnVehicleDeath" syntax="OnVehicleDeath(vehicleid, killerid)">
+			<stacksize value="1"/>
+			<param name="vehicleid">
+			</param>
+			<param name="killerid">
+			</param>
+		</member>
+		<member name="M:OnVehicleMod" syntax="OnVehicleMod(playerid, vehicleid, componentid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="vehicleid">
+			</param>
+			<param name="componentid">
+			</param>
+		</member>
+		<member name="M:OnVehiclePaintjob" syntax="OnVehiclePaintjob(playerid, vehicleid, paintjobid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="vehicleid">
+			</param>
+			<param name="paintjobid">
+			</param>
+		</member>
+		<member name="M:OnVehicleRespray" syntax="OnVehicleRespray(playerid, vehicleid, color1, color2)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="vehicleid">
+			</param>
+			<param name="color1">
+			</param>
+			<param name="color2">
+			</param>
+		</member>
+		<member name="M:OnVehicleSirenStateChange" syntax="OnVehicleSirenStateChange(playerid, vehicleid, newstate)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="vehicleid">
+			</param>
+			<param name="newstate">
+			</param>
+		</member>
+		<member name="M:OnVehicleSpawn" syntax="OnVehicleSpawn(vehicleid)">
+			<stacksize value="1"/>
+			<param name="vehicleid">
+			</param>
+		</member>
+		<member name="M:OnVehicleStreamIn" syntax="OnVehicleStreamIn(vehicleid, forplayerid)">
+			<stacksize value="1"/>
+			<param name="vehicleid">
+			</param>
+			<param name="forplayerid">
+			</param>
+		</member>
+		<member name="M:OnVehicleStreamOut" syntax="OnVehicleStreamOut(vehicleid, forplayerid)">
+			<stacksize value="1"/>
+			<param name="vehicleid">
+			</param>
+			<param name="forplayerid">
+			</param>
+		</member>
+		<member name="M:PlayBattleSounds" syntax="PlayBattleSounds(playerid)">
+			<stacksize value="7"/>
+			<referrer name="MoveFish"/>
+			<dependency name="CallRemoteFunction"/>
+			<dependency name="GetBattleIntensity"/>
+			<dependency name="LastBattleIntensity"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:PlayFishingCastAnim" syntax="PlayFishingCastAnim(playerid)">
+			<attribute name="public"/>
+			<stacksize value="12"/>
+			<dependency name="ApplyAnimation"/>
+			<dependency name="SetTimerEx"/>
+			<dependency name="false"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:PlayFishingStartSoundDelayed" syntax="PlayFishingStartSoundDelayed(playerid)">
+			<attribute name="public"/>
+			<stacksize value="5"/>
+			<dependency name="CallRemoteFunction"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:PlaySwordIdle" syntax="PlaySwordIdle(playerid)">
+			<attribute name="public"/>
+			<stacksize value="12"/>
+			<dependency name="ApplyAnimation"/>
+			<dependency name="FishingUI"/>
+			<dependency name="ShowFishingUI"/>
+			<dependency name="true"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:PlayerTextDrawAlignment" syntax="PlayerTextDrawAlignment(playerid, text, alignment)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+			<param name="alignment">
+			</param>
+		</member>
+		<member name="M:PlayerTextDrawBackgroundColor" syntax="PlayerTextDrawBackgroundColor(playerid, text, color)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+			<param name="color">
+			</param>
+		</member>
+		<member name="M:PlayerTextDrawBoxColor" syntax="PlayerTextDrawBoxColor(playerid, text, color)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+			<param name="color">
+			</param>
+		</member>
+		<member name="M:PlayerTextDrawColor" syntax="PlayerTextDrawColor(playerid, text, color)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+			<param name="color">
+			</param>
+		</member>
+		<member name="M:PlayerTextDrawDestroy" syntax="PlayerTextDrawDestroy(playerid, text)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerDisconnect"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+		</member>
+		<member name="M:PlayerTextDrawFont" syntax="PlayerTextDrawFont(playerid, text, font)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+			<param name="font">
+			</param>
+		</member>
+		<member name="M:PlayerTextDrawHide" syntax="PlayerTextDrawHide(playerid, text)">
+			<attribute name="native"/>
+			<referrer name="HideFishingUI"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+		</member>
+		<member name="M:PlayerTextDrawLetterSize" syntax="PlayerTextDrawLetterSize(playerid, text, x, y)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+			<param name="x">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="y">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:PlayerTextDrawSetOutline" syntax="PlayerTextDrawSetOutline(playerid, text, size)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+			<param name="size">
+			</param>
+		</member>
+		<member name="M:PlayerTextDrawSetProportional" syntax="PlayerTextDrawSetProportional(playerid, text, set)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+			<param name="set">
+			</param>
+		</member>
+		<member name="M:PlayerTextDrawSetSelectable" syntax="PlayerTextDrawSetSelectable(playerid, text, set)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+			<param name="set">
+			</param>
+		</member>
+		<member name="M:PlayerTextDrawSetShadow" syntax="PlayerTextDrawSetShadow(playerid, text, size)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+			<param name="size">
+			</param>
+		</member>
+		<member name="M:PlayerTextDrawShow" syntax="PlayerTextDrawShow(playerid, text)">
+			<attribute name="native"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+		</member>
+		<member name="M:PlayerTextDrawTextSize" syntax="PlayerTextDrawTextSize(playerid, text, x, y)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+			<param name="x">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="y">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:PlayerTextDrawUseBox" syntax="PlayerTextDrawUseBox(playerid, text, use)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerConnect"/>
+			<referrer name="MoveFish"/>
+			<param name="playerid">
+			</param>
+			<param name="text">
+				<paraminfo>PlayerText </paraminfo>
+			</param>
+			<param name="use">
+			</param>
+		</member>
+		<member name="M:RemovePlayerAttachedObject" syntax="RemovePlayerAttachedObject(playerid, index)">
+			<attribute name="native"/>
+			<referrer name="HideFishingUI"/>
+			<referrer name="CancelFishing"/>
+			<referrer name="StopFishing"/>
+			<param name="playerid">
+			</param>
+			<param name="index">
+			</param>
+		</member>
+		<member name="M:SendClientMessage" syntax="SendClientMessage(playerid, color, message[])">
+			<attribute name="native"/>
+			<referrer name="Audio_SendToClient"/>
+			<referrer name="OnPlayerCommandText"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<referrer name="StartFishingWait"/>
+			<referrer name="OnFishBite"/>
+			<referrer name="CancelFishing"/>
+			<param name="playerid">
+			</param>
+			<param name="color">
+			</param>
+			<param name="message">
+				<paraminfo> [] </paraminfo>
+			</param>
+		</member>
+		<member name="M:SetPlayerAttachedObject" syntax="SetPlayerAttachedObject(playerid, index, modelid, bone, fOffsetX, fOffsetY, fOffsetZ, fRotX, fRotY, fRotZ, fScaleX, fScaleY, fScaleZ, materialcolor1, materialcolor2)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerCommandText"/>
+			<param name="playerid">
+			</param>
+			<param name="index">
+			</param>
+			<param name="modelid">
+			</param>
+			<param name="bone">
+			</param>
+			<param name="fOffsetX">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fOffsetY">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fOffsetZ">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fRotX">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fRotY">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fRotZ">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fScaleX">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fScaleY">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="fScaleZ">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="materialcolor1">
+			</param>
+			<param name="materialcolor2">
+			</param>
+		</member>
+		<member name="M:SetPlayerFishingLevel" syntax="SetPlayerFishingLevel(playerid, level)">
+			<attribute name="public"/>
+			<stacksize value="1"/>
+			<dependency name="PlayerFishingLevel"/>
+			<param name="playerid">
+			</param>
+			<param name="level">
+			</param>
+		</member>
+		<member name="M:SetTimerEx" syntax="SetTimerEx(funcname[], interval, repeating, format[], ...)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerCommandText"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="PlayFishingCastAnim"/>
+			<referrer name="StartFishingWait"/>
+			<param name="funcname">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="interval">
+			</param>
+			<param name="repeating">
+			</param>
+			<param name="format">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="...">
+				<paraminfo> {Float,_} </paraminfo>
+			</param>
+		</member>
+		<member name="M:ShowFishingUI" syntax="ShowFishingUI(playerid)">
+			<stacksize value="12"/>
+			<referrer name="PlaySwordIdle"/>
+			<referrer name="OnFishBite"/>
+			<dependency name="operator-(Float:,Float:)"/>
+			<dependency name="operator/(Float:,Float:)"/>
+			<dependency name="operator&gt;(Float:,Float:)"/>
+			<dependency name="CallRemoteFunction"/>
+			<dependency name="CatchBoxMoving"/>
+			<dependency name="CatchBoxSpeed"/>
+			<dependency name="CatchBoxX"/>
+			<dependency name="FishCurrentSpeed"/>
+			<dependency name="FishDir"/>
+			<dependency name="FishFakeEscapeCount"/>
+			<dependency name="FishFakeEscapesRemaining"/>
+			<dependency name="FishPauseCounter"/>
+			<dependency name="FishState"/>
+			<dependency name="FishStateCounter"/>
+			<dependency name="FishTargetEdge"/>
+			<dependency name="FishTimer"/>
+			<dependency name="FishType"/>
+			<dependency name="FishX"/>
+			<dependency name="FishingUI"/>
+			<dependency name="KillTimer"/>
+			<dependency name="LastBattleIntensity"/>
+			<dependency name="PlayerFishingMissCount"/>
+			<dependency name="PlayerTD"/>
+			<dependency name="PlayerTD"/>
+			<dependency name="PlayerTextDrawShow"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="SetTimerEx"/>
+			<dependency name="border"/>
+			<dependency name="catch_box"/>
+			<dependency name="container"/>
+			<dependency name="fish_sprite"/>
+			<dependency name="random"/>
+			<dependency name="reel_bubble"/>
+			<dependency name="true"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:StartFishingWait" syntax="StartFishingWait(playerid)">
+			<attribute name="public"/>
+			<stacksize value="142"/>
+			<dependency name="operator-(Float:,Float:)"/>
+			<dependency name="operator/(Float:,Float:)"/>
+			<dependency name="operator*(Float:,Float:)"/>
+			<dependency name="operator&lt;(Float:,Float:)"/>
+			<dependency name="ApplyAnimation"/>
+			<dependency name="CallRemoteFunction"/>
+			<dependency name="DisablePlayerCheckpoint"/>
+			<dependency name="FishingBiteTime"/>
+			<dependency name="FishingStarting"/>
+			<dependency name="FishingWaitStartTime"/>
+			<dependency name="FishingWaitState"/>
+			<dependency name="FishingWaitTimer"/>
+			<dependency name="GetTickCount"/>
+			<dependency name="PlayerFishingMissCount"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="SetTimerEx"/>
+			<dependency name="false"/>
+			<dependency name="float"/>
+			<dependency name="floatround"/>
+			<dependency name="format"/>
+			<dependency name="random"/>
+			<dependency name="true"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:StopFishing" syntax="StopFishing(playerid)">
+			<stacksize value="7"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<dependency name="CallRemoteFunction"/>
+			<dependency name="ClearAnimations"/>
+			<dependency name="FishTimer"/>
+			<dependency name="FishingStarting"/>
+			<dependency name="FishingUI"/>
+			<dependency name="HideFishingUI"/>
+			<dependency name="IsPlayerAttachedObjectSlotUsed"/>
+			<dependency name="KillTimer"/>
+			<dependency name="PlayerFishingMissCount"/>
+			<dependency name="RemovePlayerAttachedObject"/>
+			<dependency name="TogglePlayerControllable"/>
+			<dependency name="false"/>
+			<dependency name="true"/>
+			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:TogglePlayerControllable" syntax="TogglePlayerControllable(playerid, toggle)">
+			<attribute name="native"/>
+			<referrer name="StopFishing"/>
+			<param name="playerid">
+			</param>
+			<param name="toggle">
+			</param>
+		</member>
+		<member name="M:UpdatePlayerFishingLevel" syntax="UpdatePlayerFishingLevel(playerid, newLevel)">
+			<stacksize value="1"/>
+			<dependency name="PlayerFishingLevel"/>
+			<param name="playerid">
+			</param>
+			<param name="newLevel">
+			</param>
+		</member>
+		<member name="M:float" syntax="float(value)">
+			<tagname value="Float"/>
+			<attribute name="native"/>
+			<referrer name="operator*(Float:,_:)"/>
+			<referrer name="operator/(Float:,_:)"/>
+			<referrer name="operator/(_:,Float:)"/>
+			<referrer name="operator+(Float:,_:)"/>
+			<referrer name="operator-(Float:,_:)"/>
+			<referrer name="operator-(_:,Float:)"/>
+			<referrer name="operator==(Float:,_:)"/>
+			<referrer name="operator!=(Float:,_:)"/>
+			<referrer name="operator&gt;(Float:,_:)"/>
+			<referrer name="operator&gt;(_:,Float:)"/>
+			<referrer name="operator&gt;=(Float:,_:)"/>
+			<referrer name="operator&gt;=(_:,Float:)"/>
+			<referrer name="operator&lt;(Float:,_:)"/>
+			<referrer name="operator&lt;(_:,Float:)"/>
+			<referrer name="operator&lt;=(Float:,_:)"/>
+			<referrer name="operator&lt;=(_:,Float:)"/>
+			<referrer name="StartFishingWait"/>
+			<param name="value">
+			</param>
+		</member>
+		<member name="M:floatadd" syntax="floatadd(oper1, oper2)">
+			<tagname value="Float"/>
+			<attribute name="native"/>
+			<referrer name="operator+(Float:,_:)"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:floatcmp" syntax="floatcmp(oper1, oper2)">
+			<attribute name="native"/>
+			<referrer name="operator==(Float:,Float:)"/>
+			<referrer name="operator==(Float:,_:)"/>
+			<referrer name="operator!=(Float:,Float:)"/>
+			<referrer name="operator!=(Float:,_:)"/>
+			<referrer name="operator&gt;(Float:,Float:)"/>
+			<referrer name="operator&gt;(Float:,_:)"/>
+			<referrer name="operator&gt;(_:,Float:)"/>
+			<referrer name="operator&gt;=(Float:,Float:)"/>
+			<referrer name="operator&gt;=(Float:,_:)"/>
+			<referrer name="operator&gt;=(_:,Float:)"/>
+			<referrer name="operator&lt;(Float:,Float:)"/>
+			<referrer name="operator&lt;(Float:,_:)"/>
+			<referrer name="operator&lt;(_:,Float:)"/>
+			<referrer name="operator&lt;=(Float:,Float:)"/>
+			<referrer name="operator&lt;=(Float:,_:)"/>
+			<referrer name="operator&lt;=(_:,Float:)"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:floatdiv" syntax="floatdiv(dividend, divisor)">
+			<tagname value="Float"/>
+			<attribute name="native"/>
+			<referrer name="operator/(Float:,_:)"/>
+			<referrer name="operator/(_:,Float:)"/>
+			<param name="dividend">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="divisor">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:floatmul" syntax="floatmul(oper1, oper2)">
+			<tagname value="Float"/>
+			<attribute name="native"/>
+			<referrer name="operator*(Float:,_:)"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:floatpower" syntax="floatpower(value, exponent)">
+			<tagname value="Float"/>
+			<attribute name="native"/>
+			<referrer name="GetDistance3D"/>
+			<param name="value">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="exponent">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:floatround" syntax="floatround(value, method)">
+			<attribute name="native"/>
+			<referrer name="StartFishingWait"/>
+			<param name="value">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="method">
+				<paraminfo>floatround_method </paraminfo>
+			</param>
+		</member>
+		<member name="M:floatsqroot" syntax="floatsqroot(value)">
+			<tagname value="Float"/>
+			<attribute name="native"/>
+			<referrer name="GetDistance3D"/>
+			<param name="value">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:floatsub" syntax="floatsub(oper1, oper2)">
+			<tagname value="Float"/>
+			<attribute name="native"/>
+			<referrer name="operator-(Float:,_:)"/>
+			<referrer name="operator-(_:,Float:)"/>
+			<param name="oper1">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="oper2">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:format" syntax="format(output[], len, format[], ...)">
+			<attribute name="native"/>
+			<referrer name="Audio_SendToClient"/>
+			<referrer name="OnPlayerCommandText"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<referrer name="StartFishingWait"/>
+			<referrer name="CheckFishingBite"/>
+			<param name="output">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="len">
+			</param>
+			<param name="format">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="...">
+				<paraminfo> {Float,_} </paraminfo>
+			</param>
+		</member>
+		<member name="M:printf" syntax="printf(format[], ...)">
+			<attribute name="native"/>
+			<referrer name="Audio_SendToClient"/>
+			<referrer name="OnFilterScriptInit"/>
+			<referrer name="OnPlayerCommandText"/>
+			<referrer name="HideFishingUI"/>
+			<referrer name="OnPlayerKeyStateChange"/>
+			<param name="format">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="...">
+				<paraminfo> {Float,_} </paraminfo>
+			</param>
+		</member>
+		<member name="M:random" syntax="random(max)">
+			<attribute name="native"/>
+			<referrer name="ShowFishingUI"/>
+			<referrer name="MoveFish"/>
+			<referrer name="StartFishingWait"/>
+			<param name="max">
+			</param>
+		</member>
+		<member name="M:sscanf" syntax="sscanf(data[], format[], ...)">
+			<stacksize value="1"/>
+			<referrer name="OnPlayerCommandText"/>
+			<param name="data">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="format">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="...">
+				<paraminfo> {Float,_} </paraminfo>
+			</param>
+		</member>
+		<member name="M:strcmp" syntax="strcmp(string1[], string2[], ignorecase, length)">
+			<attribute name="native"/>
+			<referrer name="OnPlayerCommandText"/>
+			<param name="string1">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="string2">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="ignorecase">
+				<paraminfo>bool </paraminfo>
+			</param>
+			<param name="length">
+			</param>
+		</member>
+
+	</members>
+</doc>

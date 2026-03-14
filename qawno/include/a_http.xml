@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet href="file:///D|/GTA-SA Development/CONR-RP/open.mp-server/qawno/xml/pawndoc.xsl" type="text/xsl"?>
+<doc source="D:\GTA-SA Development\CONR-RP\open.mp-server\qawno\include\a_http.inc">
+	<assembly>
+		<name>a_http.inc</name>
+	</assembly>
+	<members>
+
+		<!-- enumerations -->
+
+		<!-- constants -->
+
+		<!-- variables -->
+		<member name="F:__date">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__time">
+		</member>
+
+		<!-- functions -->
+
+	</members>
+</doc>
