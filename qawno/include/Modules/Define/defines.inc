@@ -119,3 +119,5 @@
 // Dynamic Faction Vehicle Spawner
 #define MAX_FACTION_GARAGE         	1000
 #define MAX_FACTION_VEHICLE  		1000
+
+#define MAX_INVENTORY 20

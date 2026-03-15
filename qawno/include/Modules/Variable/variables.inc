@@ -623,3 +623,31 @@ new pTemp[MAX_PLAYERS][PLAYER_TEMP_ENUM];
 new ContinueDamage[MAX_PLAYERS];
 
 new DamageInfo[MAX_PLAYERS][MAX_DAMAGES][DAMAGE_ENUM];
+
+new OpenInv[MAX_PLAYERS];
+
+new InventoryData[MAX_PLAYERS][MAX_INVENTORY][inventoryData];
+
+//Add items
+new const g_aInventoryItems[][e_InventoryItems] =
+{
+
+	{"Money", 1212, 1},
+
+	{"Ak47", 355, 1},
+	{"M4", 356, 1},
+	{"9mm", 346, 1},
+	{"Shotgun", 349, 1},
+	{"Deagle", 348, 1},
+	{"Mp5", 353, 1},
+	{"Cuntgun", 357, 1},
+	{"Sniper", 358, 1},
+
+	{"Water", 19563, 1},
+	{"Food", 2703, 1},
+
+	{"Cigar", 19897,1},
+
+	{"Bandage", 11747,1},
+	{"Medkit", 11738,1}
+};
