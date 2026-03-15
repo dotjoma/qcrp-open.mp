@@ -5,21 +5,40 @@
     Complete RPG-style fishing system with progression and economy
     
     Features:
-    • 6 Fishing Rods with progressive bonuses
-    • 5 Bait types with different effects
-    • 4 Fishing Zones with unique fish
-    • 30+ Fish species with rarity system
-    • Weight-based pricing and leaderboards
-    • Time-of-day bonuses
-    • Combo catch system
-    • Daily quest system
-    • Fishing tournaments
-    • Token economy
-    • Gang turf integration
-    • Experience & leveling (100 levels)
+    - 6 Fishing Rods with progressive bonuses
+    - 5 Bait types with different effects
+    - 4 Fishing Zones with unique fish
+    - 30+ Fish species with rarity system
+    - Weight-based pricing and leaderboards
+    - Time-of-day bonuses
+    - Combo catch system
+    - Daily quest system
+    - Fishing tournaments
+    - Token economy
+    - Gang turf integration
+    - Experience & leveling (100 levels)
     
     ================================================================
 */
+
+// Disable specific warnings
+#pragma warning disable 35
+#pragma warning disable 201
+#pragma warning disable 229
+#pragma warning disable 204  // unused variable
+#pragma warning disable 240
+#pragma warning disable 252
+#pragma warning disable 234
+#pragma warning disable 239  // literal array/string passed to a non-const parameter
+#pragma warning disable 214  // possibly a "const" array argument was intended
+#pragma warning disable 225  // unreachable code
+#pragma warning disable 218  // old style prototypes used with optional semicolumns
+#pragma warning disable 215  // expression has no effect
+#pragma warning disable 203  // symbol is never used
+#pragma warning disable 207  // unknown pragma
+#pragma warning disable 213  // tag mismatch
+#pragma warning disable 202  // number of arguments does not match definition
+#pragma warning disable 235  // public function lacks forward declaration
 
 #include <a_samp>
 #include <a_mysql>
@@ -128,7 +147,17 @@ public OnFilterScriptExit()
 
 public OnPlayerConnect(playerid)
 {
-    ResetPlayerFishingData(playerid);
+    // Don't reset data here! Wait for LoadPlayerFishingData to be called
+    // Initialize only the runtime state variables
+    PlayerFishingData[playerid][pIsFishing] = false;
+    PlayerFishingData[playerid][pFishingZoneID] = -1;
+    PlayerFishingData[playerid][pFishingMissCount] = 0;
+    PlayerFishingData[playerid][pTournamentScore] = 0.0;
+    PlayerFishingData[playerid][pTournamentCaught] = 0;
+    PlayerFishingData[playerid][pBoatCheckpointActive] = false;
+    PlayerFishingData[playerid][pBoatCheckpointZoneID] = -1;
+    PlayerFishingData[playerid][pFishingDBID] = 0; // Will be set when data loads
+    
     ShowFishingZonesToPlayer(playerid); // Show all fishing zones on map
     return 1;
 }
@@ -411,6 +440,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         return OnFishingProfileDialogResponse(playerid, dialogid, response, listitem, inputtext);
     }
     
+    // Quest submission dialogs (9060-9061)
+    if(dialogid >= DIALOG_QUEST_SUBMIT_MENU && dialogid <= DIALOG_QUEST_SUBMIT_CONFIRM)
+    {
+        printf("[FISHING DEBUG] Forwarding to quest submit dialog handler");
+        return OnQuestSubmitDialogResponse(playerid, dialogid, response, listitem, inputtext);
+    }
+    
     printf("[FISHING DEBUG] Dialog not handled by fishing system");
     return 0;
 }
@@ -481,33 +517,33 @@ CMD:fishinfo(playerid, params[])
     SendClientMessage(playerid, -1, "{3498DB}[FISHING SYSTEM INFO]");
     
     format(string, sizeof(string), 
-        "{FFFFFF}• {2ECC71}%d {FFFFFF}Fishing Rods available", TotalFishingRods);
+        "{FFFFFF}- {2ECC71}%d {FFFFFF}Fishing Rods available", TotalFishingRods);
     SendClientMessage(playerid, -1, string);
     
     format(string, sizeof(string), 
-        "{FFFFFF}• {2ECC71}%d {FFFFFF}Bait types available", TotalFishingBait);
+        "{FFFFFF}- {2ECC71}%d {FFFFFF}Bait types available", TotalFishingBait);
     SendClientMessage(playerid, -1, string);
     
     format(string, sizeof(string), 
-        "{FFFFFF}• {2ECC71}%d {FFFFFF}Fishing Zones (Admin Managed)", TotalZones);
+        "{FFFFFF}- {2ECC71}%d {FFFFFF}Fishing Zones (Admin Managed)", TotalZones);
     SendClientMessage(playerid, -1, string);
     
     format(string, sizeof(string), 
-        "{FFFFFF}• {2ECC71}%d {FFFFFF}Fish Species", TotalFishSpecies);
+        "{FFFFFF}- {2ECC71}%d {FFFFFF}Fish Species", TotalFishSpecies);
     SendClientMessage(playerid, -1, string);
     
     format(string, sizeof(string), 
-        "{FFFFFF}• {2ECC71}%d {FFFFFF}Daily Quests", TotalDailyQuests);
+        "{FFFFFF}- {2ECC71}%d {FFFFFF}Daily Quests", TotalDailyQuests);
     SendClientMessage(playerid, -1, string);
     
     SendClientMessage(playerid, -1, "{FFFFFF}Features:");
-    SendClientMessage(playerid, -1, "{FFFFFF}  • Rarity System (Common to Legendary)");
-    SendClientMessage(playerid, -1, "{FFFFFF}  • Weight-based pricing");
-    SendClientMessage(playerid, -1, "{FFFFFF}  • Time-of-day bonuses");
-    SendClientMessage(playerid, -1, "{FFFFFF}  • Combo catch system");
-    SendClientMessage(playerid, -1, "{FFFFFF}  • Fishing tournaments");
-    SendClientMessage(playerid, -1, "{FFFFFF}  • Token economy");
-    SendClientMessage(playerid, -1, "{FFFFFF}  • 100 levels of progression");
+    SendClientMessage(playerid, -1, "{FFFFFF}  - Rarity System (Common to Legendary)");
+    SendClientMessage(playerid, -1, "{FFFFFF}  - Weight-based pricing");
+    SendClientMessage(playerid, -1, "{FFFFFF}  - Time-of-day bonuses");
+    SendClientMessage(playerid, -1, "{FFFFFF}  - Combo catch system");
+    SendClientMessage(playerid, -1, "{FFFFFF}  - Fishing tournaments");
+    SendClientMessage(playerid, -1, "{FFFFFF}  - Token economy");
+    SendClientMessage(playerid, -1, "{FFFFFF}  - 100 levels of progression");
     
     SendClientMessage(playerid, 0x3498DBFF, "___________________________________");
     
@@ -633,6 +669,11 @@ public OnSellFish(playerid)
     
     mysql_tquery(connectionID, query);
     
+    // Log to audit
+    new auditDetails[128];
+    format(auditDetails, sizeof(auditDetails), "Sold %d fish for $%d", fishCount, totalValue);
+    LogFishingAudit(playerid, "SELL_FISH", "Mixed Fish", 0, fishCount, totalValue, auditDetails);
+    
     // Show success message
     new string[128];
     format(string, sizeof(string), 
@@ -642,8 +683,6 @@ public OnSellFish(playerid)
     
     GameTextForPlayer(playerid, "~g~FISH SOLD!", 2000, 3);
     PlayerPlaySound(playerid, 1052, 0.0, 0.0, 0.0);
-    
-    printf("[FISHING] Player %d sold %d fish for $%d", playerid, fishCount, totalValue);
     
     return 1;
 }

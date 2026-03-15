@@ -374,78 +374,10 @@ public OnGameModeInit() {
 #if defined CUSTOM_SKINS_USE_RAKNET
 
 public OnIncomingRPC(playerid, rpcid, BitStream:bs) {
-    printf("[DEBUG CUSTOM SKINS] CustomSkins_OnIncomingRPC called - playerid: %d, rpcid: %d", playerid, rpcid);
-    
-    // RPC 155 = Client mod detection packet (SECURED)
+    // RPC 155 = Client mod detection packet - DISABLED (not used anymore)
+    // Just ignore it and pass through
     if(rpcid == RPC_CUSTOM_SKIN_DETECTION) {
-        printf("[DEBUG] RPC_CUSTOM_SKIN_DETECTION received!");
-        
-        // Anti-spam: Limit detection attempts
-        if(PlayerCustomSkinData[playerid][csDetectionAttempts] >= 3) {
-            printf("[Custom Skins] SECURITY: Player %d exceeded detection attempts", playerid);
-            #if defined CustomSkins_OnIncomingRPC
-                return CustomSkins_OnIncomingRPC(playerid, rpcid, bs);
-            #else
-                return 1;
-            #endif
-        }
-        
-        PlayerCustomSkinData[playerid][csDetectionAttempts]++;
-        
-        // Read modVersion as 4 bytes
-        new b1, b2, b3, b4;
-        BS_ReadValue(bs, PR_UINT8, b1);
-        BS_ReadValue(bs, PR_UINT8, b2);
-        BS_ReadValue(bs, PR_UINT8, b3);
-        BS_ReadValue(bs, PR_UINT8, b4);
-        new modVersion = b1 + (b2 * 256) + (b3 * 65536) + (b4 * 16777216);
-        #pragma unused modVersion
-        
-        // Read fingerprint as 4 bytes
-        BS_ReadValue(bs, PR_UINT8, b1);
-        BS_ReadValue(bs, PR_UINT8, b2);
-        BS_ReadValue(bs, PR_UINT8, b3);
-        BS_ReadValue(bs, PR_UINT8, b4);
-        new fingerprint = b1 + (b2 * 256) + (b3 * 65536) + (b4 * 16777216);
-        
-        // Read skinCount as 4 bytes
-        BS_ReadValue(bs, PR_UINT8, b1);
-        BS_ReadValue(bs, PR_UINT8, b2);
-        BS_ReadValue(bs, PR_UINT8, b3);
-        BS_ReadValue(bs, PR_UINT8, b4);
-        new skinCount = b1 + (b2 * 256) + (b3 * 65536) + (b4 * 16777216);
-        
-        // Validate fingerprint (basic check)
-        if(fingerprint <= 0 || skinCount <= 0 || skinCount > 100) {
-            printf("[Custom Skins] SECURITY: Invalid data from player %d (FP: %d, Count: %d)", 
-                playerid, fingerprint, skinCount);
-            #if defined CustomSkins_OnIncomingRPC
-                return CustomSkins_OnIncomingRPC(playerid, rpcid, bs);
-            #else
-                return 1;
-            #endif
-        }
-        
-        // Store fingerprint for validation
-        PlayerCustomSkinData[playerid][csClientFingerprint] = fingerprint;
-        
-        // Read available skin IDs (for verification)
-        new availableSkins[100];
-        for(new i = 0; i < skinCount && i < 100; i++) {
-            // Read each skin ID as 4 bytes
-            BS_ReadValue(bs, PR_UINT8, b1);
-            BS_ReadValue(bs, PR_UINT8, b2);
-            BS_ReadValue(bs, PR_UINT8, b3);
-            BS_ReadValue(bs, PR_UINT8, b4);
-            availableSkins[i] = b1 + (b2 * 256) + (b3 * 65536) + (b4 * 16777216);
-        }
-        
-        SetPlayerHasCustomSkinMod(playerid, true);
-        SendClientMessage(playerid, 0x00FF00FF, "[Custom Skins] Custom skin mod detected! You can use custom skins.");
-        
-        printf("[Custom Skins] Player %d authenticated (FP: %d, Skins: %d)", 
-            playerid, fingerprint, skinCount);
-        
+        // Silently ignore detection packets
         #if defined CustomSkins_OnIncomingRPC
             return CustomSkins_OnIncomingRPC(playerid, rpcid, bs);
         #else
@@ -455,7 +387,6 @@ public OnIncomingRPC(playerid, rpcid, BitStream:bs) {
     
     // RPC 154 = Skin load confirmation from client (SECURED)
     if(rpcid == RPC_CUSTOM_SKIN_CONFIRM) {
-        printf("[DEBUG] RPC_CUSTOM_SKIN_CONFIRM received!");
         
         // Read skinid as 4 bytes
         new b1, b2, b3, b4;

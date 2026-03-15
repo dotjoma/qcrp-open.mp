@@ -46,25 +46,25 @@ stock StartFishingTournament(type, duration)
     }
     
     format(string, sizeof(string), 
-        "{F39C12}╔════════════════════════════════════╗");
+        "{F39C12}______________________________________");
     SendClientMessageToAll(-1, string);
     
     SendClientMessageToAll(-1, 
-        "{F39C12}║ {FFFFFF}FISHING TOURNAMENT STARTED!");
+        "{F39C12}- {FFFFFF}FISHING TOURNAMENT STARTED!");
     
     format(string, sizeof(string), 
-        "{F39C12}║ {FFFFFF}Type: {F39C12}%s", typeName);
+        "{F39C12}- {FFFFFF}Type: {F39C12}%s", typeName);
     SendClientMessageToAll(-1, string);
     
     format(string, sizeof(string), 
-        "{F39C12}║ {FFFFFF}Duration: {F39C12}%d minutes", duration / 60);
+        "{F39C12}- {FFFFFF}Duration: {F39C12}%d minutes", duration / 60);
     SendClientMessageToAll(-1, string);
     
     SendClientMessageToAll(-1, 
-        "{F39C12}║ {FFFFFF}Start fishing to compete!");
+        "{F39C12}- {FFFFFF}Start fishing to compete!");
     
     format(string, sizeof(string), 
-        "{F39C12}╚════════════════════════════════════╝");
+        "{F39C12}______________________________________");
     SendClientMessageToAll(-1, string);
     
     // Set timer to end tournament
@@ -118,11 +118,11 @@ public EndFishingTournament()
     new string[256];
     
     format(string, sizeof(string), 
-        "{F39C12}╔════════════════════════════════════╗");
+        "{F39C12}______________________________________");
     SendClientMessageToAll(-1, string);
     
     SendClientMessageToAll(-1, 
-        "{F39C12}║ {FFFFFF}FISHING TOURNAMENT ENDED!");
+        "{F39C12}- {FFFFFF}FISHING TOURNAMENT ENDED!");
     
     if(winnerID != -1)
     {
@@ -131,7 +131,7 @@ public EndFishingTournament()
         TournamentData[tournamentWinnerScore] = winnerScore;
         
         format(string, sizeof(string), 
-            "{F39C12}║ {FFFFFF}Winner: {F39C12}%s", TournamentData[tournamentWinnerName]);
+            "{F39C12}- {FFFFFF}Winner: {F39C12}%s", TournamentData[tournamentWinnerName]);
         SendClientMessageToAll(-1, string);
         
         switch(TournamentData[tournamentType])
@@ -139,17 +139,17 @@ public EndFishingTournament()
             case TOURNAMENT_BIGGEST:
             {
                 format(string, sizeof(string), 
-                    "{F39C12}║ {FFFFFF}Biggest Fish: {F39C12}%.2fkg", winnerScore);
+                    "{F39C12}- {FFFFFF}Biggest Fish: {F39C12}%.2fkg", winnerScore);
             }
             case TOURNAMENT_MOST:
             {
                 format(string, sizeof(string), 
-                    "{F39C12}║ {FFFFFF}Total Caught: {F39C12}%d fish", floatround(winnerScore));
+                    "{F39C12}- {FFFFFF}Total Caught: {F39C12}%d fish", floatround(winnerScore));
             }
             case TOURNAMENT_RAREST:
             {
                 format(string, sizeof(string), 
-                    "{F39C12}║ {FFFFFF}Rarity Score: {F39C12}%.0f points", winnerScore);
+                    "{F39C12}- {FFFFFF}Rarity Score: {F39C12}%.0f points", winnerScore);
             }
         }
         SendClientMessageToAll(-1, string);
@@ -160,11 +160,11 @@ public EndFishingTournament()
     else
     {
         SendClientMessageToAll(-1, 
-            "{F39C12}║ {FFFFFF}No winner - no one participated!");
+            "{F39C12}- {FFFFFF}No winner - no one participated!");
     }
     
     format(string, sizeof(string), 
-        "{F39C12}╚════════════════════════════════════╝");
+        "{F39C12}______________________________________");
     SendClientMessageToAll(-1, string);
     
     TournamentData[tournamentActive] = false;
@@ -244,22 +244,22 @@ stock GiveTournamentRewards(playerid)
     
     new string[256];
     
-    SendClientMessage(playerid, 0x2ECC71FF, "═══════════════════════════════════");
+    SendClientMessage(playerid, 0x2ECC71FF, "______________________________________");
     SendClientMessage(playerid, -1, "{2ECC71}[TOURNAMENT REWARDS]");
     
     format(string, sizeof(string), 
-        "{FFFFFF}• Money: {2ECC71}$%d", moneyReward);
+        "{FFFFFF}- Money: {2ECC71}$%d", moneyReward);
     SendClientMessage(playerid, -1, string);
     
     format(string, sizeof(string), 
-        "{FFFFFF}• Fishing Tokens: {F39C12}%d", tokenReward);
+        "{FFFFFF}- Fishing Tokens: {F39C12}%d", tokenReward);
     SendClientMessage(playerid, -1, string);
     
     format(string, sizeof(string), 
-        "{FFFFFF}• Special Bait: {3498DB}50 units");
+        "{FFFFFF}- Special Bait: {3498DB}50 units");
     SendClientMessage(playerid, -1, string);
     
-    SendClientMessage(playerid, 0x2ECC71FF, "═══════════════════════════════════");
+    SendClientMessage(playerid, 0x2ECC71FF, "______________________________________");
     
     SavePlayerFishingData(playerid);
 }
@@ -325,7 +325,7 @@ CMD:tournamentstatus(playerid, params[])
     new minutesLeft = timeLeft / 60;
     new secondsLeft = timeLeft % 60;
     
-    SendClientMessage(playerid, 0xF39C12FF, "═══════════════════════════════════");
+    SendClientMessage(playerid, 0xF39C12FF, "______________________________________");
     SendClientMessage(playerid, -1, "{F39C12}[FISHING TOURNAMENT]");
     
     new typeName[32];
@@ -365,7 +365,7 @@ CMD:tournamentstatus(playerid, params[])
     }
     SendClientMessage(playerid, -1, string);
     
-    SendClientMessage(playerid, 0xF39C12FF, "═══════════════════════════════════");
+    SendClientMessage(playerid, 0xF39C12FF, "______________________________________");
     
     return 1;
 }

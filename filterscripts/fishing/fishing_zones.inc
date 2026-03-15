@@ -206,7 +206,7 @@ stock GetZoneInfo(playerid)
     if(timeBonus > 0)
     {
         format(string, sizeof(string), 
-            "{2ECC71}• Time Bonus:{FFFFFF} +%d%% bite speed (%s)", 
+            "{2ECC71}- Time Bonus:{FFFFFF} +%d%% bite speed (%s)", 
             timeBonus, GetTimeOfDayName());
         SendClientMessage(playerid, -1, string);
     }
@@ -216,7 +216,7 @@ stock GetZoneInfo(playerid)
     if(turfBonus > 0)
     {
         format(string, sizeof(string), 
-            "{2ECC71}• Gang Territory Bonus:{FFFFFF} +%d%% bite speed", 
+            "{2ECC71}- Gang Territory Bonus:{FFFFFF} +%d%% bite speed", 
             turfBonus);
         SendClientMessage(playerid, -1, string);
     }

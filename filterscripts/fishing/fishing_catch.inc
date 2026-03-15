@@ -383,34 +383,34 @@ stock ShowCatchInfo(playerid)
     SendClientMessage(playerid, -1, string);
     
     format(string, sizeof(string), 
-        "{2ECC71}║ {FFFFFF}You caught: %s%s", 
+        "{2ECC71}- {FFFFFF}You caught: %s%s", 
         rarityColor, CaughtFish[playerid][caughtFishName]);
     SendClientMessage(playerid, -1, string);
     
     format(string, sizeof(string), 
-        "{2ECC71}║ {FFFFFF}Rarity: %s%s", 
+        "{2ECC71}- {FFFFFF}Rarity: %s%s", 
         rarityColor, GetRarityName(CaughtFish[playerid][caughtFishRarity]));
     SendClientMessage(playerid, -1, string);
     
     format(string, sizeof(string), 
-        "{2ECC71}║ {FFFFFF}Weight: {3498DB}%.2fkg", 
+        "{2ECC71}- {FFFFFF}Weight: {3498DB}%.2fkg", 
         CaughtFish[playerid][caughtFishWeight]);
     SendClientMessage(playerid, -1, string);
     
     format(string, sizeof(string), 
-        "{2ECC71}║ {FFFFFF}Estimated Value: {2ECC71}$%d {FFFFFF}(sell at fish shop)", 
+        "{2ECC71}- {FFFFFF}Estimated Value: {2ECC71}$%d {FFFFFF}(sell at fish shop)", 
         CaughtFish[playerid][caughtFishValue]);
     SendClientMessage(playerid, -1, string);
     
     format(string, sizeof(string), 
-        "{2ECC71}║ {FFFFFF}Experience: {3498DB}+%d", 
+        "{2ECC71}- {FFFFFF}Experience: {3498DB}+%d", 
         CaughtFish[playerid][caughtFishExp]);
     SendClientMessage(playerid, -1, string);
     
     if(PlayerFishingData[playerid][pFishingCombo] >= COMBO_TIER1)
     {
         format(string, sizeof(string), 
-            "{2ECC71}║ {FFFFFF}Combo: {F39C12}x%d", 
+            "{2ECC71}- {FFFFFF}Combo: {F39C12}x%d", 
             PlayerFishingData[playerid][pFishingCombo]);
         SendClientMessage(playerid, -1, string);
     }

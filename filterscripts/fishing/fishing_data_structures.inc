@@ -16,7 +16,7 @@
 #define MAX_FISHING_BAIT        10
 #define MAX_FISHING_ZONES       20
 #define MAX_FISH_SPECIES        50
-#define MAX_DAILY_QUESTS        10
+#define MAX_DAILY_QUESTS        15
 
 // Rarity multipliers
 #define RARITY_COMMON           0
@@ -45,6 +45,28 @@
 #define TOURNAMENT_BIGGEST      0
 #define TOURNAMENT_MOST         1
 #define TOURNAMENT_RAREST       2
+
+// ============================================
+// DIALOG IDS (Centralized)
+// ============================================
+
+// Fishing Shop (9000-9003)
+#define DIALOG_FISHING_SHOP_MAIN    9000
+#define DIALOG_FISHING_SHOP_RODS    9001
+#define DIALOG_FISHING_SHOP_BAIT    9002
+#define DIALOG_FISHING_BUY_CONFIRM  9003
+
+// Fishing Profile/Inventory (9020-9025)
+#define DIALOG_FISHING_PROFILE      9020
+#define DIALOG_FISHING_INVENTORY    9021
+#define DIALOG_FISHING_EQUIPMENT    9022
+#define DIALOG_FISHING_STATS        9023
+#define DIALOG_FISHING_HELP         9024
+#define DIALOG_FISHING_LEVELUP      9025
+
+// Quest Submission (9060-9061)
+#define DIALOG_QUEST_SUBMIT_MENU    9060
+#define DIALOG_QUEST_SUBMIT_CONFIRM 9061
 
 // ============================================
 // PLAYER FISHING DATA
@@ -159,10 +181,11 @@ new TotalFishSpecies = 0;
 enum E_DAILY_QUEST
 {
     questID,
-    questType,              // 0=catch amount, 1=catch rarity, 2=catch weight
+    questType,              // 0=catch amount, 1=catch rarity, 2=catch weight, 3=submit species
     questTargetAmount,
     questTargetRarity,      // For rarity quests
     Float:questTargetWeight,// For weight quests
+    questTargetSpeciesID,   // For submit species quests
     questTokenReward,
     questDescription[128]
 }

@@ -8,12 +8,7 @@
 #endif
 #define _fishing_profile_included
 
-// Dialog IDs
-#define DIALOG_FISHING_PROFILE      9020
-#define DIALOG_FISHING_INVENTORY    9021
-#define DIALOG_FISHING_EQUIPMENT    9022
-#define DIALOG_FISHING_STATS        9023
-#define DIALOG_FISHING_HELP         9024
+// Dialog IDs are now defined in fishing_data_structures.inc
 
 // ============================================
 // MAIN PROFILE COMMAND

@@ -182,11 +182,12 @@ stock ShowActorInteractionMenu(playerid, actoridx)
         "{FFFFFF}Welcome to {2ECC71}%s's{FFFFFF} fishing service!\n\n\
         What would you like to do?\n\n\
         {FFFF00}Sell Fish{FFFFFF} - Sell your caught fish for money\n\
+        {FFFF00}Submit Quest Fish{FFFFFF} - Submit fish for daily quest\n\
         {FFFF00}Fishing Shop{FFFFFF} - Buy rods, bait, and equipment",
         FishingActors[actoridx][aName]);
     
     ShowPlayerDialog(playerid, DIALOG_ACTOR_INTERACTION, DIALOG_STYLE_LIST,
-        "{2ECC71}Fishing Services", "{FFFFFF}Sell Fish\n{FFFFFF}Fishing Shop", "Select", "Cancel");
+        "{2ECC71}Fishing Services", "{FFFFFF}Sell Fish\n{FFFFFF}Submit Quest Fish\n{FFFFFF}Fishing Shop", "Select", "Cancel");
 }
 
 // Admin commands
@@ -482,6 +483,11 @@ stock OnFishActorDialogResponse(playerid, dialogid, response, listitem, inputtex
             mysql_tquery(connectionID, query, "OnSellFishFromActor", "i", playerid);
         }
         else if(listitem == 1)
+        {
+            // Submit Quest Fish
+            ShowQuestSubmitMenu(playerid);
+        }
+        else if(listitem == 2)
         {
             // Fishing Shop - show the shop
             ShowFishingShopMain(playerid);

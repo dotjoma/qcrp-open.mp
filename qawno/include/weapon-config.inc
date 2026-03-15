@@ -3014,17 +3014,26 @@ public OnPlayerConnect(playerid)
 	#endif
 
 	if (s_HealthBarForeground[playerid] != PlayerText:INVALID_TEXT_DRAW) {
-		s_InternalPlayerTextDraw[playerid][s_HealthBarForeground[playerid]] = false;
+		// TD-Streamer compatibility: Skip tracking if textdraw ID exceeds array bounds
+		if (_:s_HealthBarForeground[playerid] < MAX_PLAYER_TEXT_DRAWS) {
+			s_InternalPlayerTextDraw[playerid][s_HealthBarForeground[playerid]] = false;
+		}
 		s_HealthBarForeground[playerid] = PlayerText:INVALID_TEXT_DRAW;
 	}
 
 	if (s_DamageFeedGiven[playerid] != PlayerText:INVALID_TEXT_DRAW) {
-		s_InternalPlayerTextDraw[playerid][s_DamageFeedGiven[playerid]] = false;
+		// TD-Streamer compatibility: Skip tracking if textdraw ID exceeds array bounds
+		if (_:s_DamageFeedGiven[playerid] < MAX_PLAYER_TEXT_DRAWS) {
+			s_InternalPlayerTextDraw[playerid][s_DamageFeedGiven[playerid]] = false;
+		}
 		s_DamageFeedGiven[playerid] = PlayerText:INVALID_TEXT_DRAW;
 	}
 
 	if (s_DamageFeedTaken[playerid] != PlayerText:INVALID_TEXT_DRAW) {
-		s_InternalPlayerTextDraw[playerid][s_DamageFeedTaken[playerid]] = false;
+		// TD-Streamer compatibility: Skip tracking if textdraw ID exceeds array bounds
+		if (_:s_DamageFeedTaken[playerid] < MAX_PLAYER_TEXT_DRAWS) {
+			s_InternalPlayerTextDraw[playerid][s_DamageFeedTaken[playerid]] = false;
+		}
 		s_DamageFeedTaken[playerid] = PlayerText:INVALID_TEXT_DRAW;
 	}
 
@@ -6330,7 +6339,10 @@ static DamageFeedUpdate(playerid, bool:modified = false)
 		if (td == PlayerText:INVALID_TEXT_DRAW) {
 			printf("(wc) WARN: Unable to create damage feed textdraw");
 		} else {
-			s_InternalPlayerTextDraw[playerid][td] = true;
+			// TD-Streamer compatibility: Skip tracking if textdraw ID exceeds array bounds
+			if (_:td < MAX_PLAYER_TEXT_DRAWS) {
+				s_InternalPlayerTextDraw[playerid][td] = true;
+			}
 
 			PlayerTextDrawLetterSize(playerid, td, 0.2, 0.9);
 			PlayerTextDrawColour(playerid, td, WC_FEED_GIVEN_COLOR);
@@ -6348,7 +6360,10 @@ static DamageFeedUpdate(playerid, bool:modified = false)
 		if (td == PlayerText:INVALID_TEXT_DRAW) {
 			printf("(wc) WARN: Unable to create damage feed textdraw");
 		} else {
-			s_InternalPlayerTextDraw[playerid][td] = true;
+			// TD-Streamer compatibility: Skip tracking if textdraw ID exceeds array bounds
+			if (_:td < MAX_PLAYER_TEXT_DRAWS) {
+				s_InternalPlayerTextDraw[playerid][td] = true;
+			}
 
 			PlayerTextDrawLetterSize(playerid, td, 0.2, 0.9);
 			PlayerTextDrawColour(playerid, td, WC_FEED_TAKEN_COLOR);
@@ -6466,7 +6481,7 @@ static DamageFeedUpdateText(playerid)
 
 	if (s_DamageFeedGiven[playerid] == PlayerText:INVALID_TEXT_DRAW) {
 		printf("(wc) WARN: Doesn't have feed textdraw when needed");
-	} else if (s_InternalPlayerTextDraw[playerid][s_DamageFeedGiven[playerid]]) {
+	} else if (_:s_DamageFeedGiven[playerid] < MAX_PLAYER_TEXT_DRAWS && s_InternalPlayerTextDraw[playerid][s_DamageFeedGiven[playerid]]) {
 		if (buf[0]) {
 			PlayerTextDrawSetString(playerid, s_DamageFeedGiven[playerid], buf);
 			PlayerTextDrawShow(playerid, s_DamageFeedGiven[playerid]);
@@ -6514,7 +6529,7 @@ static DamageFeedUpdateText(playerid)
 
 	if (s_DamageFeedTaken[playerid] == PlayerText:INVALID_TEXT_DRAW) {
 		printf("(wc) WARN: Doesn't have feed textdraw when needed");
-	} else if (s_InternalPlayerTextDraw[playerid][s_DamageFeedTaken[playerid]]) {
+	} else if (_:s_DamageFeedTaken[playerid] < MAX_PLAYER_TEXT_DRAWS && s_InternalPlayerTextDraw[playerid][s_DamageFeedTaken[playerid]]) {
 		if (buf[0]) {
 			PlayerTextDrawSetString(playerid, s_DamageFeedTaken[playerid], buf);
 			PlayerTextDrawShow(playerid, s_DamageFeedTaken[playerid]);

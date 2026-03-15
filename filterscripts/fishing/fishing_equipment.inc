@@ -189,10 +189,7 @@ public GetPlayerComboBonus(playerid)
 // DIALOG IDS
 // ============================================
 
-#define DIALOG_FISHING_SHOP_MAIN    9000
-#define DIALOG_FISHING_SHOP_RODS    9001
-#define DIALOG_FISHING_SHOP_BAIT    9002
-#define DIALOG_FISHING_BUY_CONFIRM  9003
+// Dialog IDs are now defined in fishing_data_structures.inc
 
 // ============================================
 // EQUIPMENT COMMANDS
@@ -500,6 +497,13 @@ stock OnFishingEquipmentDialogResponse(playerid, dialogid, response, listitem, i
                     PlayerFishingData[playerid][pFishingDBID]);
                 mysql_tquery(connectionID, query);
                 
+                // Log to audit
+                new auditDetails[128];
+                format(auditDetails, sizeof(auditDetails), "Purchased %s for $%d", 
+                    FishingRods[itemIndex][rodName], rodPrice);
+                LogFishingAudit(playerid, "BUY_ROD", FishingRods[itemIndex][rodName], 
+                    FishingRods[itemIndex][rodID], 1, rodPrice, auditDetails);
+                
                 new string[128];
                 format(string, sizeof(string), "{2ECC71}[FISHING]{FFFFFF} You purchased a %s for $%d!", 
                     FishingRods[itemIndex][rodName], rodPrice);
@@ -532,6 +536,13 @@ stock OnFishingEquipmentDialogResponse(playerid, dialogid, response, listitem, i
                     PlayerFishingData[playerid][pFishingBaitAmount],
                     PlayerFishingData[playerid][pFishingDBID]);
                 mysql_tquery(connectionID, query);
+                
+                // Log to audit
+                new auditDetails[128];
+                format(auditDetails, sizeof(auditDetails), "Purchased 10x %s for $%d", 
+                    FishingBait[itemIndex][baitName], baitPrice);
+                LogFishingAudit(playerid, "BUY_BAIT", FishingBait[itemIndex][baitName], 
+                    FishingBait[itemIndex][baitID], 10, baitPrice, auditDetails);
                 
                 new string[128];
                 format(string, sizeof(string), "{3498DB}[FISHING]{FFFFFF} You purchased 10x %s for $%d!", 

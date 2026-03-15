@@ -30,7 +30,7 @@
 			<member name="C:caughtFishExp" value="68">
 			</member>
 		</member>
-		<member name="T:E_DAILY_QUEST" value="134">
+		<member name="T:E_DAILY_QUEST" value="135">
 			<tagname value="E_DAILY_QUEST"/>
 			<member name="C:questID" value="0">
 			</member>
@@ -43,9 +43,11 @@
 			<member name="C:questTargetWeight" value="4">
 				<tagname value="Float"/>
 			</member>
-			<member name="C:questTokenReward" value="5">
+			<member name="C:questTargetSpeciesID" value="5">
 			</member>
-			<member name="C:questDescription" value="6">
+			<member name="C:questTokenReward" value="6">
+			</member>
+			<member name="C:questDescription" value="7">
 				<size value="128"/>
 			</member>
 		</member>
@@ -340,6 +342,7 @@
 			<referrer name="AssignDailyQuest"/>
 			<referrer name="StartFishingTournament"/>
 			<referrer name="EndFishingTournament"/>
+			<referrer name="SSCANF_OnPlayerConnect"/>
 			<referrer name="CheckBoatCheckpoints"/>
 			<referrer name="OnCreateFishingPlayer"/>
 		</member>
@@ -390,6 +393,9 @@
 			<referrer name="UpdateDailyQuestProgress"/>
 			<referrer name="CompleteDailyQuest"/>
 			<referrer name="cmd_fishquest"/>
+			<referrer name="GetPlayerQuestIndex"/>
+			<referrer name="ShowQuestSubmitMenu"/>
+			<referrer name="OnCheckQuestFish"/>
 			<referrer name="ShowFishingStatistics"/>
 		</member>
 		<member name="F:FishSpecies">
@@ -397,6 +403,8 @@
 			<referrer name="GenerateFish"/>
 			<referrer name="GetCaughtFishMinWeight"/>
 			<referrer name="GetCaughtFishMaxWeight"/>
+			<referrer name="cmd_fishquest"/>
+			<referrer name="OnCheckQuestFish"/>
 		</member>
 		<member name="F:FishingActors">
 			<referrer name="InitActorData"/>
@@ -490,6 +498,7 @@
 			<referrer name="SavePlayerFishingData"/>
 			<referrer name="GiveFishingExperience"/>
 			<referrer name="OnFishingLevelUp"/>
+			<referrer name="LogFishingAudit"/>
 			<referrer name="ConsumeFishingBait"/>
 			<referrer name="BreakFishingCombo"/>
 			<referrer name="GetPlayerFishingBait"/>
@@ -514,6 +523,9 @@
 			<referrer name="CompleteDailyQuest"/>
 			<referrer name="cmd_fishquest"/>
 			<referrer name="cmd_newquest"/>
+			<referrer name="GetPlayerQuestIndex"/>
+			<referrer name="ShowQuestSubmitMenu"/>
+			<referrer name="OnQuestSubmitDialogResponse"/>
 			<referrer name="GiveTournamentRewards"/>
 			<referrer name="UpdateLeaderboard"/>
 			<referrer name="cmd_fishstats"/>
@@ -521,6 +533,7 @@
 			<referrer name="ShowFishInventoryDialog"/>
 			<referrer name="ShowEquipmentDetails"/>
 			<referrer name="ShowFishingStatistics"/>
+			<referrer name="SSCANF_OnPlayerConnect"/>
 			<referrer name="CheckBoatCheckpoints"/>
 			<referrer name="cmd_myfish"/>
 			<referrer name="cmd_sellfish"/>
@@ -574,6 +587,7 @@
 			<referrer name="AssignDailyQuest"/>
 			<referrer name="UpdateDailyQuestProgress"/>
 			<referrer name="cmd_fishquest"/>
+			<referrer name="GetPlayerQuestIndex"/>
 			<referrer name="cmd_fishinfo"/>
 		</member>
 		<member name="F:TotalFishSpecies">
@@ -790,10 +804,14 @@
 			<referrer name="LoadPlayerFishingData"/>
 			<referrer name="OnLoadPlayerFishing"/>
 			<referrer name="SavePlayerFishingData"/>
+			<referrer name="LogFishingAudit"/>
 			<referrer name="OnFishingEquipmentDialogResponse"/>
 			<referrer name="LogFishCatch"/>
 			<referrer name="AddFishToInventory"/>
 			<referrer name="OnCheckInventorySpace"/>
+			<referrer name="ShowQuestSubmitMenu"/>
+			<referrer name="OnCheckQuestFish"/>
+			<referrer name="OnQuestSubmitDialogResponse"/>
 			<referrer name="UpdateLeaderboard"/>
 			<referrer name="ShowTopTotalCaught"/>
 			<referrer name="OnLoadTopTotalCaught"/>
@@ -1307,7 +1325,7 @@
 			</param>
 		</member>
 		<member name="M:AssignDailyQuest" syntax="AssignDailyQuest(playerid)">
-			<stacksize value="147"/>
+			<stacksize value="152"/>
 			<referrer name="OnLoadPlayerFishing"/>
 			<referrer name="cmd_newquest"/>
 			<referrer name="OnInitializeFishingData"/>
@@ -1531,6 +1549,7 @@
 			<referrer name="cmd_fishboat"/>
 			<referrer name="cmd_fishactor"/>
 			<referrer name="OnSellFishFromActor"/>
+			<referrer name="LogFishingAudit"/>
 			<referrer name="ShowFishingShopMain"/>
 			<referrer name="ShowFishingRodsShop"/>
 			<referrer name="ShowFishingBaitShop"/>
@@ -1686,6 +1705,7 @@
 		<member name="M:CompleteDailyQuest" syntax="CompleteDailyQuest(playerid, questIdx)">
 			<stacksize value="264"/>
 			<referrer name="UpdateDailyQuestProgress"/>
+			<referrer name="OnQuestSubmitDialogResponse"/>
 			<dependency name="DailyQuests"/>
 			<dependency name="PlayerFishingData"/>
 			<dependency name="PlayerFishingData"/>
@@ -1922,6 +1942,7 @@
 		<member name="M:DeletePVar" syntax="DeletePVar(playerid, varname[])">
 			<attribute name="native"/>
 			<referrer name="OnFishingEquipmentDialogResponse"/>
+			<referrer name="OnQuestSubmitDialogResponse"/>
 			<param name="playerid">
 			</param>
 			<param name="varname">
@@ -2249,6 +2270,7 @@
 		<member name="M:GetPVarInt" syntax="GetPVarInt(playerid, varname[])">
 			<attribute name="native"/>
 			<referrer name="OnFishingEquipmentDialogResponse"/>
+			<referrer name="OnQuestSubmitDialogResponse"/>
 			<param name="playerid">
 			</param>
 			<param name="varname">
@@ -2341,6 +2363,7 @@
 			<referrer name="OnFilterScriptInit"/>
 			<referrer name="OnGameModeInit"/>
 			<referrer name="OnPlayerConnect"/>
+			<referrer name="LogFishingAudit"/>
 			<referrer name="EndFishingTournament"/>
 			<referrer name="cmd_tournamentleaders"/>
 			<referrer name="UpdateLeaderboard"/>
@@ -2392,6 +2415,19 @@
 			</param>
 			<param name="z">
 				<paraminfo>Float &amp; </paraminfo>
+			</param>
+		</member>
+		<member name="M:GetPlayerQuestIndex" syntax="GetPlayerQuestIndex(playerid)">
+			<stacksize value="3"/>
+			<referrer name="ShowQuestSubmitMenu"/>
+			<referrer name="OnCheckQuestFish"/>
+			<referrer name="OnQuestSubmitDialogResponse"/>
+			<dependency name="DailyQuests"/>
+			<dependency name="PlayerFishingData"/>
+			<dependency name="TotalDailyQuests"/>
+			<dependency name="pDailyQuestID"/>
+			<dependency name="questID"/>
+			<param name="playerid">
 			</param>
 		</member>
 		<member name="M:GetPlayerRareChanceBonus" syntax="GetPlayerRareChanceBonus(playerid)">
@@ -2835,6 +2871,7 @@
 			<dependency name="questID"/>
 			<dependency name="questTargetAmount"/>
 			<dependency name="questTargetRarity"/>
+			<dependency name="questTargetSpeciesID"/>
 			<dependency name="questTargetWeight"/>
 			<dependency name="questTokenReward"/>
 			<dependency name="questType"/>
@@ -2938,6 +2975,41 @@
 			<param name="playerid">
 			</param>
 		</member>
+		<member name="M:LogFishingAudit" syntax="LogFishingAudit(playerid, action_type[], item_name[], item_id, quantity, amount, details[])">
+			<stacksize value="1067"/>
+			<referrer name="OnFishingLevelUp"/>
+			<referrer name="OnFishingEquipmentDialogResponse"/>
+			<referrer name="OnSellFish"/>
+			<dependency name="CallRemoteFunction"/>
+			<dependency name="GetPlayerName"/>
+			<dependency name="PlayerFishingData"/>
+			<dependency name="PlayerFishingData"/>
+			<dependency name="connectionID"/>
+			<dependency name="mysql_format"/>
+			<dependency name="mysql_tquery"/>
+			<dependency name="pFishingDBID"/>
+			<dependency name="pFishingExp"/>
+			<dependency name="pFishingLevel"/>
+			<dependency name="pFishingTokens"/>
+			<dependency name="printf"/>
+			<param name="playerid">
+			</param>
+			<param name="action_type">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="item_name">
+				<paraminfo> [] </paraminfo>
+			</param>
+			<param name="item_id">
+			</param>
+			<param name="quantity">
+			</param>
+			<param name="amount">
+			</param>
+			<param name="details">
+				<paraminfo> [] </paraminfo>
+			</param>
+		</member>
 		<member name="M:OnActorStreamIn" syntax="OnActorStreamIn(actorid, forplayerid)">
 			<stacksize value="1"/>
 			<param name="actorid">
@@ -3008,6 +3080,30 @@
 			<dependency name="pFishingDBID"/>
 			<dependency name="pFishingZoneID"/>
 			<param name="playerid">
+			</param>
+		</member>
+		<member name="M:OnCheckQuestFish" syntax="OnCheckQuestFish(playerid, targetSpeciesID, targetAmount)">
+			<attribute name="public"/>
+			<stacksize value="525"/>
+			<dependency name="DailyQuests"/>
+			<dependency name="DailyQuests"/>
+			<dependency name="FishSpecies"/>
+			<dependency name="FishSpecies"/>
+			<dependency name="GetPlayerQuestIndex"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="SetPVarInt"/>
+			<dependency name="ShowPlayerDialog"/>
+			<dependency name="cache_get_field_content_int"/>
+			<dependency name="cache_get_row_count"/>
+			<dependency name="connectionID"/>
+			<dependency name="fishName"/>
+			<dependency name="format"/>
+			<dependency name="questTokenReward"/>
+			<param name="playerid">
+			</param>
+			<param name="targetSpeciesID">
+			</param>
+			<param name="targetAmount">
 			</param>
 		</member>
 		<member name="M:OnCreateActor" syntax="OnCreateActor(playerid, x, y, z, a, zoneid)">
@@ -3148,6 +3244,7 @@
 			<dependency name="OnFishZoneDialogResponse"/>
 			<dependency name="OnFishingEquipmentDialogResponse"/>
 			<dependency name="OnFishingProfileDialogResponse"/>
+			<dependency name="OnQuestSubmitDialogResponse"/>
 			<dependency name="printf"/>
 			<param name="playerid">
 			</param>
@@ -3208,6 +3305,7 @@
 			<dependency name="SendClientMessage"/>
 			<dependency name="ShowFishingShopMain"/>
 			<dependency name="ShowPlayerDialog"/>
+			<dependency name="ShowQuestSubmitMenu"/>
 			<dependency name="aID"/>
 			<dependency name="aName"/>
 			<dependency name="aPosA"/>
@@ -3299,7 +3397,7 @@
 			</param>
 		</member>
 		<member name="M:OnFishingEquipmentDialogResponse" syntax="OnFishingEquipmentDialogResponse(playerid, dialogid, response, listitem, inputtext[])">
-			<stacksize value="395"/>
+			<stacksize value="523"/>
 			<referrer name="OnDialogResponse"/>
 			<dependency name="CallRemoteFunction"/>
 			<dependency name="DeletePVar"/>
@@ -3308,6 +3406,7 @@
 			<dependency name="FishingRods"/>
 			<dependency name="FishingRods"/>
 			<dependency name="GetPVarInt"/>
+			<dependency name="LogFishingAudit"/>
 			<dependency name="PlayerFishingData"/>
 			<dependency name="PlayerFishingData"/>
 			<dependency name="SendClientMessage"/>
@@ -3352,14 +3451,15 @@
 			</param>
 		</member>
 		<member name="M:OnFishingLevelUp" syntax="OnFishingLevelUp(playerid)">
-			<stacksize value="263"/>
+			<stacksize value="651"/>
 			<referrer name="GiveFishingExperience"/>
 			<dependency name="GameTextForPlayer"/>
+			<dependency name="LogFishingAudit"/>
 			<dependency name="PlayLevelUpSound"/>
 			<dependency name="PlayerFishingData"/>
 			<dependency name="PlayerFishingData"/>
 			<dependency name="SavePlayerFishingData"/>
-			<dependency name="SendClientMessage"/>
+			<dependency name="ShowPlayerDialog"/>
 			<dependency name="format"/>
 			<dependency name="pFishingLevel"/>
 			<dependency name="pFishingTokens"/>
@@ -4098,6 +4198,32 @@
 			<param name="connectionHandle">
 			</param>
 		</member>
+		<member name="M:OnQuestSubmitDialogResponse" syntax="OnQuestSubmitDialogResponse(playerid, dialogid, response, listitem, inputtext[])">
+			<stacksize value="523"/>
+			<referrer name="OnDialogResponse"/>
+			<dependency name="CompleteDailyQuest"/>
+			<dependency name="DeletePVar"/>
+			<dependency name="GetPVarInt"/>
+			<dependency name="GetPlayerQuestIndex"/>
+			<dependency name="PlayerFishingData"/>
+			<dependency name="PlayerFishingData"/>
+			<dependency name="connectionID"/>
+			<dependency name="mysql_format"/>
+			<dependency name="mysql_tquery"/>
+			<dependency name="pDailyQuestProgress"/>
+			<dependency name="pFishingDBID"/>
+			<param name="playerid">
+			</param>
+			<param name="dialogid">
+			</param>
+			<param name="response">
+			</param>
+			<param name="listitem">
+			</param>
+			<param name="inputtext">
+				<paraminfo> [] </paraminfo>
+			</param>
+		</member>
 		<member name="M:OnRconCommand" syntax="OnRconCommand(cmd[])">
 			<stacksize value="1"/>
 			<param name="cmd">
@@ -4117,9 +4243,10 @@
 		</member>
 		<member name="M:OnSellFish" syntax="OnSellFish(playerid)">
 			<attribute name="public"/>
-			<stacksize value="394"/>
+			<stacksize value="522"/>
 			<dependency name="CallRemoteFunction"/>
 			<dependency name="GameTextForPlayer"/>
+			<dependency name="LogFishingAudit"/>
 			<dependency name="PlayerFishingData"/>
 			<dependency name="PlayerFishingData"/>
 			<dependency name="PlayerPlaySound"/>
@@ -4131,7 +4258,6 @@
 			<dependency name="mysql_format"/>
 			<dependency name="mysql_tquery"/>
 			<dependency name="pFishingDBID"/>
-			<dependency name="printf"/>
 			<param name="playerid">
 			</param>
 		</member>
@@ -4437,7 +4563,6 @@
 		</member>
 		<member name="M:ResetPlayerFishingData" syntax="ResetPlayerFishingData(playerid)">
 			<stacksize value="1"/>
-			<referrer name="SSCANF_OnPlayerConnect"/>
 			<dependency name="PlayerFishingData"/>
 			<dependency name="PlayerFishingData"/>
 			<dependency name="false"/>
@@ -4522,8 +4647,18 @@
 			<attribute name="public"/>
 			<stacksize value="4"/>
 			<referrer name="OnPlayerConnect"/>
-			<dependency name="ResetPlayerFishingData"/>
+			<dependency name="PlayerFishingData"/>
+			<dependency name="PlayerFishingData"/>
 			<dependency name="ShowFishingZonesToPlayer"/>
+			<dependency name="false"/>
+			<dependency name="pBoatCheckpointActive"/>
+			<dependency name="pBoatCheckpointZoneID"/>
+			<dependency name="pFishingDBID"/>
+			<dependency name="pFishingMissCount"/>
+			<dependency name="pFishingZoneID"/>
+			<dependency name="pIsFishing"/>
+			<dependency name="pTournamentCaught"/>
+			<dependency name="pTournamentScore"/>
 			<param name="playerid">
 			</param>
 		</member>
@@ -4609,7 +4744,6 @@
 			<referrer name="OnFishActorDialogResponse"/>
 			<referrer name="OnSellFishFromActor"/>
 			<referrer name="GiveFishingExperience"/>
-			<referrer name="OnFishingLevelUp"/>
 			<referrer name="ConsumeFishingBait"/>
 			<referrer name="BreakFishingCombo"/>
 			<referrer name="cmd_fishingshop"/>
@@ -4623,6 +4757,8 @@
 			<referrer name="CompleteDailyQuest"/>
 			<referrer name="cmd_fishquest"/>
 			<referrer name="cmd_newquest"/>
+			<referrer name="ShowQuestSubmitMenu"/>
+			<referrer name="OnCheckQuestFish"/>
 			<referrer name="UpdateTournamentScore"/>
 			<referrer name="GiveTournamentRewards"/>
 			<referrer name="cmd_starttournament"/>
@@ -4681,6 +4817,7 @@
 		<member name="M:SetPVarInt" syntax="SetPVarInt(playerid, varname[], int_value)">
 			<attribute name="native"/>
 			<referrer name="OnFishingEquipmentDialogResponse"/>
+			<referrer name="OnCheckQuestFish"/>
 			<param name="playerid">
 			</param>
 			<param name="varname">
@@ -5021,10 +5158,12 @@
 			<referrer name="ShowActorInteractionMenu"/>
 			<referrer name="cmd_fishactor_edit"/>
 			<referrer name="OnFishActorDialogResponse"/>
+			<referrer name="OnFishingLevelUp"/>
 			<referrer name="ShowFishingShopMain"/>
 			<referrer name="ShowFishingRodsShop"/>
 			<referrer name="ShowFishingBaitShop"/>
 			<referrer name="OnFishingEquipmentDialogResponse"/>
+			<referrer name="OnCheckQuestFish"/>
 			<referrer name="ShowFishingProfile"/>
 			<referrer name="ShowEquipmentDetails"/>
 			<referrer name="ShowFishingStatistics"/>
@@ -5047,6 +5186,25 @@
 			</param>
 			<param name="button2">
 				<paraminfo> [] </paraminfo>
+			</param>
+		</member>
+		<member name="M:ShowQuestSubmitMenu" syntax="ShowQuestSubmitMenu(playerid)">
+			<stacksize value="524"/>
+			<referrer name="OnFishActorDialogResponse"/>
+			<dependency name="DailyQuests"/>
+			<dependency name="GetPlayerQuestIndex"/>
+			<dependency name="PlayerFishingData"/>
+			<dependency name="PlayerFishingData"/>
+			<dependency name="SendClientMessage"/>
+			<dependency name="connectionID"/>
+			<dependency name="mysql_format"/>
+			<dependency name="mysql_tquery"/>
+			<dependency name="pDailyQuestCompleted"/>
+			<dependency name="pFishingDBID"/>
+			<dependency name="questTargetAmount"/>
+			<dependency name="questTargetSpeciesID"/>
+			<dependency name="questType"/>
+			<param name="playerid">
 			</param>
 		</member>
 		<member name="M:ShowTopBiggestWeight" syntax="ShowTopBiggestWeight(playerid)">
@@ -5283,6 +5441,7 @@
 			<referrer name="OnSellFishFromActor"/>
 			<referrer name="OnLoadPlayerFishing"/>
 			<referrer name="OnCheckInventorySpace"/>
+			<referrer name="OnCheckQuestFish"/>
 			<referrer name="OnLoadTopTotalCaught"/>
 			<referrer name="OnLoadTopLegendary"/>
 			<referrer name="OnShowFishInventory"/>
@@ -5308,6 +5467,7 @@
 			<referrer name="OnSellFishFromActor"/>
 			<referrer name="OnLoadPlayerFishing"/>
 			<referrer name="OnCheckInventorySpace"/>
+			<referrer name="OnCheckQuestFish"/>
 			<referrer name="OnLoadTopTotalCaught"/>
 			<referrer name="OnLoadTopBiggestWeight"/>
 			<referrer name="OnLoadTopLegendary"/>
@@ -5705,12 +5865,15 @@
 			<dependency name="operator/(Float:,Float:)"/>
 			<dependency name="DailyQuests"/>
 			<dependency name="DailyQuests"/>
+			<dependency name="FishSpecies"/>
+			<dependency name="FishSpecies"/>
 			<dependency name="GetRarityName"/>
 			<dependency name="GetRarityName"/>
 			<dependency name="PlayerFishingData"/>
 			<dependency name="PlayerFishingData"/>
 			<dependency name="SendClientMessage"/>
 			<dependency name="TotalDailyQuests"/>
+			<dependency name="fishName"/>
 			<dependency name="float"/>
 			<dependency name="format"/>
 			<dependency name="pDailyQuestCompleted"/>
@@ -5720,6 +5883,7 @@
 			<dependency name="questID"/>
 			<dependency name="questTargetAmount"/>
 			<dependency name="questTargetRarity"/>
+			<dependency name="questTargetSpeciesID"/>
 			<dependency name="questTargetWeight"/>
 			<dependency name="questTokenReward"/>
 			<dependency name="questType"/>
@@ -6350,6 +6514,7 @@
 			<referrer name="UpdateDailyQuestProgress"/>
 			<referrer name="CompleteDailyQuest"/>
 			<referrer name="cmd_fishquest"/>
+			<referrer name="OnCheckQuestFish"/>
 			<referrer name="StartFishingTournament"/>
 			<referrer name="EndFishingTournament"/>
 			<referrer name="UpdateTournamentScore"/>
@@ -6422,9 +6587,12 @@
 			<referrer name="OnSellFishFromActor"/>
 			<referrer name="LoadPlayerFishingData"/>
 			<referrer name="SavePlayerFishingData"/>
+			<referrer name="LogFishingAudit"/>
 			<referrer name="LogFishCatch"/>
 			<referrer name="AddFishToInventory"/>
 			<referrer name="OnCheckInventorySpace"/>
+			<referrer name="ShowQuestSubmitMenu"/>
+			<referrer name="OnQuestSubmitDialogResponse"/>
 			<referrer name="UpdateLeaderboard"/>
 			<referrer name="ShowTopTotalCaught"/>
 			<referrer name="ShowTopBiggestWeight"/>
@@ -6467,10 +6635,13 @@
 			<referrer name="OnSellFishFromActor"/>
 			<referrer name="LoadPlayerFishingData"/>
 			<referrer name="SavePlayerFishingData"/>
+			<referrer name="LogFishingAudit"/>
 			<referrer name="OnFishingEquipmentDialogResponse"/>
 			<referrer name="LogFishCatch"/>
 			<referrer name="AddFishToInventory"/>
 			<referrer name="OnCheckInventorySpace"/>
+			<referrer name="ShowQuestSubmitMenu"/>
+			<referrer name="OnQuestSubmitDialogResponse"/>
 			<referrer name="UpdateLeaderboard"/>
 			<referrer name="ShowTopTotalCaught"/>
 			<referrer name="ShowTopBiggestWeight"/>
@@ -6533,6 +6704,7 @@
 			<referrer name="LoadPlayerFishingData"/>
 			<referrer name="OnLoadPlayerFishing"/>
 			<referrer name="SavePlayerFishingData"/>
+			<referrer name="LogFishingAudit"/>
 			<referrer name="ConsumeFishingBait"/>
 			<referrer name="ShowFishingRodsShop"/>
 			<referrer name="ShowFishingBaitShop"/>
@@ -6553,7 +6725,6 @@
 			<referrer name="OnPlayerStateChange"/>
 			<referrer name="IsPlayerOnFishingBoat"/>
 			<referrer name="OnDialogResponse"/>
-			<referrer name="OnSellFish"/>
 			<referrer name="OnPlayerLoginFishing"/>
 			<referrer name="CheckOrCreateFishingPlayer"/>
 			<referrer name="OnTestQuery"/>

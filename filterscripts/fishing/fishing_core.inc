@@ -202,39 +202,75 @@ stock GetRequiredFishingExp(level)
 
 stock OnFishingLevelUp(playerid)
 {
-    new string[256];
-    format(string, sizeof(string), 
-        "{2ECC71}____________________________________");
-    SendClientMessage(playerid, -1, string);
-    
-    format(string, sizeof(string), 
-        "{2ECC71}FISHING LEVEL UP! {FFFFFF}Level {2ECC71}%d", 
-        PlayerFishingData[playerid][pFishingLevel]);
-    SendClientMessage(playerid, -1, string);
-    
-    SendClientMessage(playerid, -1, "{FFFFFF}Benefits:");
-    SendClientMessage(playerid, -1, "{FFFFFF}• Faster fish bite times");
-    SendClientMessage(playerid, -1, "{FFFFFF}• Increased rare fish chance");
-    SendClientMessage(playerid, -1, "{FFFFFF}• Better combo bonuses");
-    
     // Give token reward
     new tokenReward = PlayerFishingData[playerid][pFishingLevel] * 5;
     PlayerFishingData[playerid][pFishingTokens] += tokenReward;
     
+    // Build dialog message
+    new string[512];
     format(string, sizeof(string), 
-        "{FFFFFF}Reward: {F39C12}%d Fishing Tokens", tokenReward);
-    SendClientMessage(playerid, -1, string);
+        "{2ECC71}Congratulations! You've reached Fishing Level {FFFFFF}%d{2ECC71}!\n\n\
+        {FFFFFF}New Benefits:\n\
+        {2ECC71}- {FFFFFF}Faster fish bite times\n\
+        {2ECC71}- {FFFFFF}Increased rare fish chance\n\
+        {2ECC71}- {FFFFFF}Better combo bonuses\n\n\
+        {F39C12}Reward: {FFFFFF}%d Fishing Tokens",
+        PlayerFishingData[playerid][pFishingLevel],
+        tokenReward);
     
-    format(string, sizeof(string), 
-        "{2ECC71}____________________________________");
-    SendClientMessage(playerid, -1, string);
+    ShowPlayerDialog(playerid, DIALOG_FISHING_LEVELUP, DIALOG_STYLE_MSGBOX, 
+        "{2ECC71}FISHING LEVEL UP!", string, "Awesome!", "");
     
     GameTextForPlayer(playerid, "~g~LEVEL UP!", 3000, 3);
     
     // Play level up sound
     PlayLevelUpSound(playerid);
     
+    // Log to audit
+    new auditDetails[128];
+    format(auditDetails, sizeof(auditDetails), "Level %d reached, earned %d tokens", 
+        PlayerFishingData[playerid][pFishingLevel], tokenReward);
+    LogFishingAudit(playerid, "LEVEL_UP", "", 0, 0, tokenReward, auditDetails);
+    
     SavePlayerFishingData(playerid);
+}
+
+// ============================================
+// AUDIT LOGGING
+// ============================================
+
+stock LogFishingAudit(playerid, const action_type[], const item_name[] = "", item_id = 0, quantity = 0, amount = 0, const details[] = "")
+{
+    if(PlayerFishingData[playerid][pFishingDBID] == 0) return 0;
+    
+    new username[24], query[1024];
+    GetPlayerName(playerid, username, 24);
+    
+    // Get user_id from gamemode
+    new user_id = CallRemoteFunction("GetPlayerUserID", "i", playerid);
+    
+    mysql_format(connectionID, query, sizeof(query),
+        "INSERT INTO fishing_audit (player_id, user_id, username, action_type, item_name, item_id, quantity, amount, player_level, player_exp, player_tokens, details) VALUES (%d, %d, '%e', '%e', '%e', %d, %d, %d, %d, %d, %d, '%e')",
+        PlayerFishingData[playerid][pFishingDBID],
+        user_id,
+        username,
+        action_type,
+        item_name,
+        item_id,
+        quantity,
+        amount,
+        PlayerFishingData[playerid][pFishingLevel],
+        PlayerFishingData[playerid][pFishingExp],
+        PlayerFishingData[playerid][pFishingTokens],
+        details
+    );
+    
+    mysql_tquery(connectionID, query);
+    
+    printf("[FISHING AUDIT] %s - Player: %s (ID: %d) | Action: %s | Item: %s | Qty: %d | Amount: $%d", 
+        username, username, playerid, action_type, item_name, quantity, amount);
+    
+    return 1;
 }
 
 // ============================================
