@@ -322,7 +322,7 @@ function main()
     
     if bass then
         if initBass() then
-            sampAddChatMessage("{00FF00}[Audio Client] BASS initialized - audio ready!", 0xFFFFFFFF)
+            -- sampAddChatMessage("{00FF00}[Audio Client] BASS initialized - audio ready!", 0xFFFFFFFF)
         else
             sampAddChatMessage("{FF0000}[Audio Client] BASS initialization failed!", 0xFFFFFFFF)
         end
