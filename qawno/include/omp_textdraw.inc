@@ -50,8 +50,9 @@ const Text:INVALID_TEXT_DRAW                   = Text:0xFFFF;
  * <library>omp_textdraw</library>
  */
 #if defined MAX_PLAYER_TEXT_DRAWS
-	#if MAX_PLAYER_TEXT_DRAWS < PlayerText:1 || MAX_PLAYER_TEXT_DRAWS > PlayerText:256
-		#error MAX_PLAYER_TEXT_DRAWS must be >= 1 and <= 256
+	// TD-Streamer compatibility: Allow values > 256 for unlimited textdraws
+	#if MAX_PLAYER_TEXT_DRAWS < PlayerText:1
+		#error MAX_PLAYER_TEXT_DRAWS must be >= 1
 	#endif
 
 	const PlayerText:__MAX_PLAYER_TEXT_DRAWS   = MAX_PLAYER_TEXT_DRAWS;
