@@ -4,3 +4,4 @@ svlog.txt
 scriptfiles/*
 !scriptfiles/*files-here.txt
 open.mp-docs/
+qcrp-launcher/QcRP_Launcher.exe
