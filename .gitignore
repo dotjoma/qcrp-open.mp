@@ -1,5 +1,6 @@
 config.json
 log.txt
 svlog.txt
-scriptfiles/
+scriptfiles/*
+!scriptfiles/*files-here.txt
 open.mp-docs/
