@@ -5,3 +5,5 @@ scriptfiles/*
 !scriptfiles/*files-here.txt
 open.mp-docs/
 qcrp-launcher/QcRP_Launcher.exe
+mysql_log.txt
+logs/
