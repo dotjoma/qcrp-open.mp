@@ -23,6 +23,9 @@
 #define CAMERA_POKER_INTERPOLATE_SPEED		5000 // ms (longer = slower)
 #define DIALOG_BUYPOKER 					10042
 
+// Hospital dialog
+#define DIALOG_HOSPITAL_BILL                9070                   
+
 // Crate System
 #define MAX_CRATES 100
 
