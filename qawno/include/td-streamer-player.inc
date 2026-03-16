@@ -338,7 +338,9 @@ stock TDS_PlayerTextDrawDestroy(playerid, PlayerText:text) {
         _DestroyTextDraw(playerid, data);
     }
 
-    str_delete(data[E_TD_STRING]);
+    if(str_valid(data[E_TD_STRING])) {
+        str_delete(data[E_TD_STRING]);
+    }
     pool_remove(pool, id);
     return 1;
 }

@@ -207,24 +207,42 @@ stock HidePlayerSelectionMenu(playerid)
 	if(!IsPlayerConnected(playerid) || !selectorMenu[playerid][pDisplayed])
 	    return false;
 
+	// Hide all textdraws first
 	for(new i = 0; i < MAX_SELECTION_MENU_ITEMS; i ++)
 	{
 	    if(i < 24)
-			PlayerTextDrawDestroy(playerid, selectorMenu[playerid][pMenuBoxes][i]);
+	    {
+			PlayerTextDrawHide(playerid, selectorMenu[playerid][pMenuBoxes][i]);
+		}
 	    if(i < 5)
 	        TextDrawHideForPlayer(playerid, selectorBaseTD[i]);
+	}
 	
+	PlayerTextDrawHide(playerid, selectorMenu[playerid][pMenuTitle]);
+	PlayerTextDrawHide(playerid, selectorMenu[playerid][pMenuPage]);
+	CancelSelectTextDraw(playerid);
+	
+	// Now destroy after hiding
+	for(new i = 0; i < MAX_SELECTION_MENU_ITEMS; i ++)
+	{
+	    if(i < 24)
+	    {
+			PlayerTextDrawDestroy(playerid, selectorMenu[playerid][pMenuBoxes][i]);
+			selectorMenu[playerid][pMenuBoxes][i] = PlayerText:INVALID_TEXT_DRAW;
+		}
 	    selectorMenu[playerid][pList][i] = -1;
 	}
 	
+	PlayerTextDrawDestroy(playerid, selectorMenu[playerid][pMenuTitle]);
+	PlayerTextDrawDestroy(playerid, selectorMenu[playerid][pMenuPage]);
+	selectorMenu[playerid][pMenuTitle] = PlayerText:INVALID_TEXT_DRAW;
+	selectorMenu[playerid][pMenuPage] = PlayerText:INVALID_TEXT_DRAW;
+	
 	selectorMenu[playerid][pDisplayed] = false;
-	selectorMenu[playerid][pIgnore]    = true;
+	selectorMenu[playerid][pIgnore]    = false;
 	selectorMenu[playerid][pExtra]     = -1;
 	selectorMenu[playerid][pPage]      = 0;
 	
-	PlayerTextDrawDestroy(playerid, selectorMenu[playerid][pMenuTitle]);
-	PlayerTextDrawDestroy(playerid, selectorMenu[playerid][pMenuPage]);
-	CancelSelectTextDraw(playerid);
 	return true;
 }
 
@@ -380,13 +398,10 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	{
 	    if(clickedid == Text:INVALID_TEXT_DRAW || clickedid == selectorBaseTD[4])
 	    {
-			if(funcidx("OnPlayerSelectionMenuResponse") == -1 || CallLocalFunction("OnPlayerSelectionMenuResponse", "iiiii", playerid, selectorMenu[playerid][pExtra], 0, -1, -1))
+	    	HidePlayerSelectionMenu(playerid);
+			if(funcidx("OnPlayerSelectionMenuResponse") != -1)
 			{
-		    	HidePlayerSelectionMenu(playerid);
-			}
-			else
-			{
-			    SetTimerEx("EnableSelectionMenuCursor", 200, false, "i", playerid);
+				CallLocalFunction("OnPlayerSelectionMenuResponse", "iiiii", playerid, selectorMenu[playerid][pExtra], 0, -1, -1);
 			}
 		}
 	    else if(clickedid == selectorBaseTD[2] && selectorMenu[playerid][pPage] > 1)
